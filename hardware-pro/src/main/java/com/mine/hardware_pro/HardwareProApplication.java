@@ -8,6 +8,7 @@ public class HardwareProApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(HardwareProApplication.class, args);
+        System.out.println("APP STARTED");
 	}
 
 }
