@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const errorAlert = document.getElementById('error-alert');
     const logoutAlert = document.getElementById('logout-alert');
     const resetSuccessAlert = document.getElementById('resetsuccess-alert');
+    const registerSuccessAlert = document.getElementById('registersuccess-alert');
 
     function hideAfterDelay(alertElement) {
         setTimeout(() => {
@@ -31,6 +32,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (urlParams.has('resetSuccess') && resetSuccessAlert) {
         resetSuccessAlert.classList.remove('d-none');
         hideAfterDelay(resetSuccessAlert);
+        clearUrlParams();
+    }
+    if (urlParams.has('registerSuccess') && registerSuccessAlert) {
+        registerSuccessAlert.classList.remove('d-none');
+        hideAfterDelay(registerSuccessAlert);
         clearUrlParams();
     }
 });

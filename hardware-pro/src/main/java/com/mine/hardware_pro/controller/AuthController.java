@@ -23,6 +23,11 @@ public class AuthController {
         this.passwordResetService = passwordResetService;
     }
 
+    @GetMapping("/")
+    public String redirectToLogin() {
+        return "redirect:/login";
+    }
+
     @GetMapping("/login")
     public String showLoginForm() {
         return "auth/auth-login";
@@ -43,7 +48,7 @@ public class AuthController {
     public String registerUser(@ModelAttribute RegisterRequest registerRequest) {
         authService.register(registerRequest);
 
-        return "redirect:/login";
+        return "redirect:/login?registerSuccess";
     }
 
     // Ruta para mostrar el formulario de "olvidé mi contraseña"
