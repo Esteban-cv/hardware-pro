@@ -11,9 +11,8 @@
     <link rel="shortcut icon" th:href="@{/img/favicon.svg}" type="image/x-icon">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <!-- DataTable -->
-    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.2/css/dataTables.dataTables.css" />
-    <script src="https://cdn.datatables.net/2.3.2/js/dataTables.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.bootstrap5.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/3.0.2/css/responsive.bootstrap5.css">
 </head>
 
 <body th:data-success-message="${success}" th:data-error-message="${error}">
@@ -37,6 +36,13 @@
 <script th:src="@{/js/apexcharts.min.js}"></script>
 <script th:src="@{/js/dashboard.js}"></script>
 <script th:src="@{/js/main.js}"></script>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/2.0.8/js/dataTables.bootstrap5.js"></script>
+<script src="https://cdn.datatables.net/responsive/3.0.2/js/dataTables.responsive.js"></script>
+<script src="https://cdn.datatables.net/responsive/3.0.2/js/responsive.bootstrap5.js"></script>
+<script th:src="@{/js/datatable-config.js}"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 <script th:src="@{/js/alerts.js}"></script>

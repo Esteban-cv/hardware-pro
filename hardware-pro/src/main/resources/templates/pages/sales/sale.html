@@ -32,10 +32,8 @@
                         <tr>
                             <th>ID</th>
                             <th>FECHA</th>
-                            <th>SUBTOTAL</th>
                             <th>IVA</th>
                             <th>TOTAL</th>
-                            <th>CLIENTE</th>
                             <th>EMPLEADO</th>
                             <th>ACCIONES</th>
                         </tr>
@@ -44,10 +42,8 @@
                         <tr th:each="sale : ${sales}">
                             <td th:text="${sale.idSale}"></td>
                             <td th:text="${#temporals.format(sale.date, 'dd/MM/yyyy')}"></td>
-                            <td th:text="'$' + ${#numbers.formatDecimal(sale.subTotal, 1, 'COMMA', 2, 'POINT')}"></td>
                             <td th:text="'$' + ${#numbers.formatDecimal(sale.tax, 1, 'COMMA', 2, 'POINT')}"></td>
                             <td th:text="'$' + ${#numbers.formatDecimal(sale.total, 1, 'COMMA', 2, 'POINT')}"></td>
-                            <td th:text="${sale.client != null ? sale.client.name : 'N/A'}"></td>
                             <td th:text="${sale.employee != null ? sale.employee.name : 'N/A'}"></td>
                             <td>
                                 <div class="d-flex gap-1">
