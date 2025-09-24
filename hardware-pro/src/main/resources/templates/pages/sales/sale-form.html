@@ -1,159 +1,120 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Voler Admin Dashboard</title>
-
-    <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
-
-    <link rel="stylesheet" th:href="@{/css/Chart.min.css}">
-
-    <link rel="stylesheet" th:href="@{/css/perfect-scrollbar.css}">
-    <link rel="stylesheet" th:href="@{/css/app.css}">
-    <link rel="shortcut icon" th:href="@{/img/favicon.svg}" type="image/x-icon">
-</head>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
 
 <body>
-<div id="app">
-    <nav th:replace="fragments/sidebar :: sidebar"></nav>
-    <div id="main">
-        <div th:replace="fragments/header :: header"></div>
-        <div layout:fragment="content" class="main-content container-fluid">
+<div layout:fragment="content">
+    <div class="page-title d-flex justify-content-between align-items-center">
+        <div>
+            <h3><i class="fas fa-cash-register me-2"></i>Gestionar una nueva Venta</h3>
+            <p class="text-subtitle text-muted">Sistema integrado de punto de venta - IVA 19%</p>
+        </div>
+        <a th:href="@{/sales}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-1"></i>
+            Volver al listado
+        </a>
+    </div>
 
-            <div class="page-title d-flex justify-content-between align-items-center">
-                <div>
-                    <h3>Gestionar una nueva Venta</h3>
-                    <p class="text-subtitle text-muted">Sistema integrado de punto de venta - IVA 19%</p>
+    <div id="notificationContainer" class="my-3"></div>
+
+    <section class="section">
+        <div class="row g-4">
+            <div class="col-lg-7">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <h4 class="card-title"><i class="fas fa-search me-2"></i>Listado de Artículos</h4>
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text"><i class="fas fa-search"></i></span>
+                            <input type="text" id="productSearch" class="form-control" placeholder="Buscar por nombre, código o categoría...">
+                        </div>
+
+                        <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3 overflow-auto" id="productsGrid" style="flex-grow: 1;">
+                            <div th:each="article : ${articles}" class="col">
+                                <div class="card h-100 shadow-sm" th:attr="data-id=${article.idArticle}, data-name=${article.name}, data-code=${article.code}, data-price=${article.price}, data-stock=${article.quantity}">
+                                    <div class="card-body d-flex flex-column">
+                                        <h5 class="card-title fs-6" th:text="${article.name}">Artículo</h5>
+                                        <p class="card-subtitle mb-2 text-muted small" th:text="'Código: ' + ${article.code}">COD001</p>
+                                        <span class="badge bg-info align-self-start mb-2" th:text="${article.category.name}">Categoría</span>
+                                        <div class="mt-auto">
+                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                <span class="fw-bold text-primary" th:text="'$' + ${#numbers.formatDecimal(article.price, 1, 'COMMA', 2, 'POINT')}">$0.00</span>
+                                                <span class="badge" th:classappend="${article.quantity > 10 ? 'bg-success' : article.quantity > 0 ? 'bg-warning' : 'bg-danger'}" th:text="'Stock: ' + ${article.quantity}">Stock: 0</span>
+                                            </div>
+                                            <button type="button" class="btn btn-primary btn-sm w-100" th:disabled="${article.quantity == 0}" onclick="addToCart(this)">
+                                                <i class="fas fa-plus me-1"></i> Agregar
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div th:if="${#lists.isEmpty(articles)}" class="col-12 text-center text-muted p-5">
+                                <i class="fas fa-box-open fa-3x mb-3"></i>
+                                <h4>No hay artículos disponibles</h4>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <a th:href="@{/sales}" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left me-1"></i>
-                    Volver al listado
-                </a>
             </div>
 
-            <div id="notificationContainer" class="my-3"></div>
-
-            <section class="section">
-                <div class="row g-4">
-
-                    <div class="col-lg-7">
-                        <div class="card h-100">
-                            <div class="card-header">
-                                <h4 class="card-title"><i class="fas fa-search me-2"></i>Listado de Artículos</h4>
-                            </div>
-                            <div class="card-body d-flex flex-column">
-                                <div class="input-group mb-3">
-                                    <span class="input-group-text"><i class="fas fa-search"></i></span>
-                                    <input type="text" id="productSearch" class="form-control" placeholder="Buscar por nombre, código o categoría...">
+            <div class="col-lg-5">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <form id="saleForm" th:action="@{/sales/save}" method="post" th:object="${sale}">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                            <input type="hidden" th:field="*{date}" th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}" />
+                            <h4 class="card-title border-bottom pb-2 mb-3"><i class="fas fa-user-circle me-2"></i>Información de Venta</h4>
+                            <div class="row g-3 mb-4">
+                                <div class="col-12">
+                                    <label for="client" class="form-label">Cliente *</label>
+                                    <select id="client" th:field="*{client}" class="form-select" required>
+                                        <option value="">Seleccione un cliente...</option>
+                                        <option th:each="c : ${clients}" th:value="${c.idClient}" th:text="${c.name + ' - ' + c.document}"></option>
+                                    </select>
                                 </div>
-
-                                <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3 overflow-auto" id="productsGrid" style="flex-grow: 1;">
-                                    <div th:each="article : ${articles}" class="col">
-                                        <div class="card h-100 shadow-sm" th:attr="data-id=${article.idArticle}, data-name=${article.name}, data-code=${article.code}, data-price=${article.price}, data-stock=${article.quantity}">
-                                            <div class="card-body d-flex flex-column">
-                                                <h5 class="card-title fs-6" th:text="${article.name}">Artículo</h5>
-                                                <p class="card-subtitle mb-2 text-muted small" th:text="'Código: ' + ${article.code}">COD001</p>
-                                                <span class="badge bg-info align-self-start mb-2" th:text="${article.category.name}">Categoría</span>
-
-                                                <div class="mt-auto">
-                                                    <div class="d-flex justify-content-between align-items-center mb-2">
-                                                        <span class="fw-bold text-primary" th:text="'$' + ${#numbers.formatDecimal(article.price, 1, 'COMMA', 2, 'POINT')}">$0.00</span>
-                                                        <span class="badge" th:classappend="${article.quantity > 10 ? 'bg-success' : article.quantity > 0 ? 'bg-warning' : 'bg-danger'}" th:text="'Stock: ' + ${article.quantity}">Stock: 0</span>
-                                                    </div>
-                                                    <button type="button" class="btn btn-primary btn-sm w-100" th:disabled="${article.quantity == 0}" onclick="addToCart(this)">
-                                                        <i class="fas fa-plus me-1"></i> Agregar
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div th:if="${#lists.isEmpty(articles)}" class="col-12 text-center text-muted p-5">
-                                        <i class="fas fa-box-open fa-3x mb-3"></i>
-                                        <h4>No hay artículos disponibles</h4>
-                                    </div>
+                                <div class="col-12">
+                                    <label for="employee" class="form-label">Vendedor *</label>
+                                    <select id="employee" th:field="*{employee}" class="form-select" required>
+                                        <option value="">Seleccione un vendedor...</option>
+                                        <option th:each="emp : ${employees}" th:value="${emp.idEmployee}" th:text="${emp.name}"></option>
+                                    </select>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-5">
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <form id="saleForm" th:action="@{/sales/save}" method="post" th:object="${sale}">
-                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                                    <input type="hidden" th:field="*{date}" th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}" />
-
-                                    <h4 class="card-title border-bottom pb-2 mb-3"><i class="fas fa-user-circle me-2"></i>Información de Venta</h4>
-                                    <div class="row g-3 mb-4">
-                                        <div class="col-12">
-                                            <label for="client" class="form-label">Cliente *</label>
-                                            <select id="client" th:field="*{client}" class="form-select" required>
-                                                <option value="">Seleccione un cliente...</option>
-                                                <option th:each="c : ${clients}" th:value="${c.idClient}" th:text="${c.name + ' - ' + c.document}"></option>
-                                            </select>
-                                        </div>
-                                        <div class="col-12">
-                                            <label for="employee" class="form-label">Vendedor *</label>
-                                            <select id="employee" th:field="*{employee}" class="form-select" required>
-                                                <option value="">Seleccione un vendedor...</option>
-                                                <option th:each="emp : ${employees}" th:value="${emp.idEmployee}" th:text="${emp.name}"></option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
-                                        <h4 class="card-title mb-0"><i class="fas fa-shopping-cart me-2"></i>Carrito <span id="cartCount" class="badge bg-primary rounded-pill">0</span></h4>
-                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="clearCart()" title="Limpiar carrito">
-                                            <i class="fas fa-eraser me-1"></i> Limpiar
-                                        </button>
-                                    </div>
-                                    <div class="border rounded p-3 bg-light" id="cartContainer" style="min-height: 150px; max-height: 250px; overflow-y: auto;">
-                                        <div class="text-center text-muted" id="emptyCart">
-                                            <p class="mb-1"><i class="fas fa-cart-plus fa-2x"></i></p>
-                                            <small>Agregue productos desde el catálogo</small>
-                                        </div>
-                                        <div id="cartItems"></div>
-                                    </div>
-
-                                    <ul class="list-group list-group-flush my-3">
-                                        <li class="list-group-item d-flex justify-content-between"><span>Subtotal:</span> <span id="subtotal">$0.00</span></li>
-                                        <li class="list-group-item d-flex justify-content-between"><span>IVA (19%):</span> <span id="tax">$0.00</span></li>
-                                        <li class="list-group-item d-flex justify-content-between fs-5 fw-bold"><span class="text-success">Total a Pagar:</span> <span id="total" class="text-success">$0.00</span></li>
-                                    </ul>
-                                    <input type="hidden" th:field="*{subTotal}" id="subTotalInput">
-                                    <input type="hidden" th:field="*{tax}" id="taxInput">
-                                    <input type="hidden" th:field="*{total}" id="totalInput">
-
-                                    <div class="d-grid gap-2 mt-auto">
-                                        <button type="submit" class="btn btn-success btn-lg" id="processButton" disabled>
-                                            <i class="fas fa-check-circle me-1"></i> Procesar Venta
-                                        </button>
-                                    </div>
-                                    <div id="cartItemsHidden" style="display: none;"></div>
-                                </form>
+                            <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
+                                <h4 class="card-title mb-0"><i class="fas fa-shopping-cart me-2"></i>Carrito <span id="cartCount" class="badge bg-primary rounded-pill">0</span></h4>
+                                <button type="button" class="btn btn-outline-danger btn-sm" onclick="clearCart()" title="Limpiar carrito">
+                                    <i class="fas fa-eraser me-1"></i> Limpiar
+                                </button>
                             </div>
-                        </div>
+                            <div class="border rounded p-3 bg-light" id="cartContainer" style="min-height: 150px; max-height: 250px; overflow-y: auto;">
+                                <div class="text-center text-muted" id="emptyCart">
+                                    <p class="mb-1"><i class="fas fa-cart-plus fa-2x"></i></p>
+                                    <small>Agregue productos desde el catálogo</small>
+                                </div>
+                                <div id="cartItems"></div>
+                            </div>
+                            <ul class="list-group list-group-flush my-3">
+                                <li class="list-group-item d-flex justify-content-between"><span>Subtotal:</span> <span id="subtotal">$0.00</span></li>
+                                <li class="list-group-item d-flex justify-content-between"><span>IVA (19%):</span> <span id="tax">$0.00</span></li>
+                                <li class="list-group-item d-flex justify-content-between fs-5 fw-bold"><span class="text-success">Total a Pagar:</span> <span id="total" class="text-success">$0.00</span></li>
+                            </ul>
+                            <input type="hidden" th:field="*{subTotal}" id="subTotalInput">
+                            <input type="hidden" th:field="*{tax}" id="taxInput">
+                            <input type="hidden" th:field="*{total}" id="totalInput">
+                            <div class="d-grid gap-2 mt-auto">
+                                <button type="submit" class="btn btn-success btn-lg" id="processButton" disabled>
+                                    <i class="fas fa-check-circle me-1"></i> Procesar Venta
+                                </button>
+                            </div>
+                            <div id="cartItemsHidden" style="display: none;"></div>
+                        </form>
                     </div>
-
                 </div>
-            </section>
+            </div>
         </div>
-        <footer th:replace="fragments/footer :: footer"></footer>
-    </div>
+    </section>
 </div>
-<script th:src="@{/js/feather.min.js}"></script>
-<script th:src="@{/js/perfect-scrollbar.min.js}"></script>
-<script th:src="@{/js/app.js}"></script>
-
-<script th:src="@{/js/Chart.min.js}"></script>
-<script th:src="@{/js/apexcharts.min.js}"></script>
-<script th:src="@{/js/dashboard.js}"></script>
-<script th:src="@{/js/sales-module.js}"></script>
-
-<script th:src="@{/js/main.js}"></script>
-
 </body>
-
 </html>

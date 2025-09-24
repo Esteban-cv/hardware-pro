@@ -1,135 +1,99 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Voler Admin Dashboard</title>
-
-    <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
-
-    <link rel="stylesheet" th:href="@{/css/Chart.min.css}">
-
-    <link rel="stylesheet" th:href="@{/css/perfect-scrollbar.css}">
-    <link rel="stylesheet" th:href="@{/css/app.css}">
-    <link rel="shortcut icon" th:href="@{/img/favicon.svg}" type="image/x-icon">
-</head>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
 
 <body>
-<div id="app">
-    <nav th:replace="fragments/sidebar :: sidebar"></nav>
-    <div id="main">
-        <div th:replace="fragments/header :: header"></div>
-        <div layout:fragment="content" class="main-content container-fluid">
+<div layout:fragment="content">
+    <div class="page-title d-flex justify-content-between align-items-center">
+        <div>
+            <h3><i class="fas fa-edit me-2"></i>Editar Venta</h3>
+            <p class="text-subtitle text-muted">Solo puede modificar la fecha y las observaciones de la venta.</p>
+        </div>
+        <a th:href="@{/sales}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-1"></i>
+            Volver al listado
+        </a>
+    </div>
 
-            <div class="page-title d-flex justify-content-between align-items-center">
-                <div>
-                    <h3>Editar Venta</h3>
-                    <p class="text-subtitle text-muted">Solo puede modificar la fecha y las observaciones de la venta.</p>
-                </div>
-                <a th:href="@{/sales}" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left me-1"></i>
-                    Volver al listado
-                </a>
-            </div>
+    <section class="section">
+        <div class="card">
+            <div class="card-body">
+                <form id="editSaleForm" th:action="@{/sales/edit/{id}(id=${sale.idSale})}" method="post">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
-            <section class="section">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <form id="editSaleForm" th:action="@{/sales/edit/{id}(id=${sale.idSale})}" method="post">
-                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-
-                                    <h4 class="card-title border-bottom pb-2 mb-3"><i class="fas fa-user-circle me-2"></i>Información General</h4>
-                                    <div class="row g-3 mb-4">
-                                        <div class="col-md-6">
-                                            <label class="form-label">Cliente</label>
-                                            <input type="text" class="form-control" th:value="${sale.client.name}" readonly />
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label">Vendedor</label>
-                                            <input type="text" class="form-control" th:value="${sale.employee.name}" readonly />
-                                        </div>
-                                    </div>
-
-                                    <h4 class="card-title border-bottom pb-2 mb-3"><i class="fas fa-pencil-alt me-2"></i>Campos Editables</h4>
-                                    <div class="row g-3 mb-4">
-                                        <div class="col-md-4">
-                                            <label for="date" class="form-label">Fecha de la Venta</label>
-                                            <input type="date" id="date" name="date" class="form-control" required th:value="${sale.date != null} ? ${#temporals.format(sale.date, 'yyyy-MM-dd')} : ''" />
-                                        </div>
-                                        <div class="col-md-8">
-                                            <label for="observations" class="form-label">Observaciones</label>
-                                            <textarea id="observations" name="observations" class="form-control" rows="1" placeholder="Observaciones administrativas (opcional)" th:text="${sale.observations}"></textarea>
-                                        </div>
-                                    </div>
-
-                                    <h4 class="card-title border-bottom pb-2 mb-3"><i class="fas fa-boxes me-2"></i>Detalle de Productos Vendidos</h4>
-                                    <div class="table-responsive">
-                                        <table class="table table-bordered table-sm">
-                                            <thead class="table-light">
-                                            <tr>
-                                                <th>Producto</th>
-                                                <th>Código</th>
-                                                <th class="text-end">Cantidad</th>
-                                                <th class="text-end">Precio Unit.</th>
-                                                <th class="text-end">Total</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr th:each="detail : ${sale.details}">
-                                                <td th:text="${detail.article.name}"></td>
-                                                <td th:text="${detail.article.code}"></td>
-                                                <td class="text-end" th:text="${detail.quantity}"></td>
-                                                <td class="text-end" th:text="'$' + ${#numbers.formatDecimal(detail.unitPrice, 1, 'COMMA', 2, 'POINT')}"></td>
-                                                <td class="text-end" th:text="'$' + ${#numbers.formatDecimal(detail.total, 1, 'COMMA', 2, 'POINT')}"></td>
-                                            </tr>
-                                            <tr class="table-light">
-                                                <td colspan="4" class="text-end fw-bold">Subtotal:</td>
-                                                <td class="text-end fw-bold" th:text="'$' + ${#numbers.formatDecimal(sale.subTotal, 1, 'COMMA', 2, 'POINT')}"></td>
-                                            </tr>
-                                            <tr class="table-light">
-                                                <td colspan="4" class="text-end fw-bold">IVA (19%):</td>
-                                                <td class="text-end fw-bold" th:text="'$' + ${#numbers.formatDecimal(sale.tax, 1, 'COMMA', 2, 'POINT')}"></td>
-                                            </tr>
-                                            <tr class="table-primary">
-                                                <td colspan="4" class="text-end fw-bold fs-5">Total General:</td>
-                                                <td class="text-end fw-bold fs-5" th:text="'$' + ${#numbers.formatDecimal(sale.total, 1, 'COMMA', 2, 'POINT')}"></td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-                                    <div class="mt-4 d-flex justify-content-end gap-2">
-                                        <a th:href="@{/sales}" class="btn btn-secondary">
-                                            <i class="fas fa-times me-1"></i> Cancelar
-                                        </a>
-                                        <button type="submit" class="btn btn-primary">
-                                            <i class="fas fa-save me-1"></i> Guardar Cambios
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
+                    <h4 class="card-title border-bottom pb-2 mb-3"><i class="fas fa-user-circle me-2"></i>Información General</h4>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label">Cliente</label>
+                            <input type="text" class="form-control" th:value="${sale.client.name}" readonly />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Vendedor</label>
+                            <input type="text" class="form-control" th:value="${sale.employee.name}" readonly />
                         </div>
                     </div>
-                </div>
-            </section>
 
+                    <h4 class="card-title border-bottom pb-2 mb-3"><i class="fas fa-pencil-alt me-2"></i>Campos Editables</h4>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-4">
+                            <label for="date" class="form-label">Fecha de la Venta</label>
+                            <input type="date" id="date" name="date" class="form-control" required th:value="${sale.date != null} ? ${#temporals.format(sale.date, 'yyyy-MM-dd')} : ''" />
+                        </div>
+                        <div class="col-md-8">
+                            <label for="observations" class="form-label">Observaciones</label>
+                            <textarea id="observations" name="observations" class="form-control" rows="1" placeholder="Observaciones administrativas (opcional)" th:text="${sale.observations}"></textarea>
+                        </div>
+                    </div>
+
+                    <h4 class="card-title border-bottom pb-2 mb-3"><i class="fas fa-boxes me-2"></i>Detalle de Productos Vendidos</h4>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-sm">
+                            <thead class="table-light">
+                            <tr>
+                                <th>Producto</th>
+                                <th>Código</th>
+                                <th class="text-end">Cantidad</th>
+                                <th class="text-end">Precio Unit.</th>
+                                <th class="text-end">Total</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="detail : ${sale.details}">
+                                <td th:text="${detail.article.name}"></td>
+                                <td th:text="${detail.article.code}"></td>
+                                <td class="text-end" th:text="${detail.quantity}"></td>
+                                <td class="text-end" th:text="'$' + ${#numbers.formatDecimal(detail.unitPrice, 1, 'COMMA', 2, 'POINT')}"></td>
+                                <td class="text-end" th:text="'$' + ${#numbers.formatDecimal(detail.total, 1, 'COMMA', 2, 'POINT')}"></td>
+                            </tr>
+                            <tr class="table-light">
+                                <td colspan="4" class="text-end fw-bold">Subtotal:</td>
+                                <td class="text-end fw-bold" th:text="'$' + ${#numbers.formatDecimal(sale.subTotal, 1, 'COMMA', 2, 'POINT')}"></td>
+                            </tr>
+                            <tr class="table-light">
+                                <td colspan="4" class="text-end fw-bold">IVA (19%):</td>
+                                <td class="text-end fw-bold" th:text="'$' + ${#numbers.formatDecimal(sale.tax, 1, 'COMMA', 2, 'POINT')}"></td>
+                            </tr>
+                            <tr class="table-primary">
+                                <td colspan="4" class="text-end fw-bold fs-5">Total General:</td>
+                                <td class="text-end fw-bold fs-5" th:text="'$' + ${#numbers.formatDecimal(sale.total, 1, 'COMMA', 2, 'POINT')}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="mt-4 d-flex justify-content-end gap-2">
+                        <a th:href="@{/sales}" class="btn btn-secondary">
+                            <i class="fas fa-times me-1"></i> Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-1"></i> Guardar Cambios
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
-        <footer th:replace="fragments/footer :: footer"></footer>
-    </div>
+    </section>
 </div>
-<script th:src="@{/js/feather.min.js}"></script>
-<script th:src="@{/js/perfect-scrollbar.min.js}"></script>
-<script th:src="@{/js/app.js}"></script>
-
-<script th:src="@{/js/Chart.min.js}"></script>
-<script th:src="@{/js/apexcharts.min.js}"></script>
-<script th:src="@{/js/dashboard.js}"></script>
-
-<script th:src="@{/js/main.js}"></script>
-
 </body>
-
 </html>
