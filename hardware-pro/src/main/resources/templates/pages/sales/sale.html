@@ -47,7 +47,7 @@
                             <td th:text="${sale.employee != null ? sale.employee.name : 'N/A'}"></td>
                             <td>
                                 <div class="d-flex gap-1">
-                                    <button class="btn btn-info btn-sm" th:data-id="${sale.idSale}" data-type="sale" title="Ver Detalles">
+                                    <button class="btn btn-info btn-sm btn-view" th:data-id="${sale.idSale}" data-type="sale" title="Ver Detalles">
                                         <i data-feather="eye"></i>
                                     </button>
                                     <a th:href="@{'/sales/edit/' + ${sale.idSale}}" class="btn btn-warning btn-sm" title="Editar">
@@ -67,6 +67,74 @@
             </div>
         </div>
     </section>
+
+    <div class="modal fade" id="saleDetailsModal" tabindex="-1" aria-labelledby="saleDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-info text-white">
+                    <h5 class="modal-title" id="saleDetailsModalLabel">
+                        <i class="fas fa-file-invoice-dollar me-2"></i>Detalles de la Venta - ID: <span id="modalSaleId"></span>
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <strong><i class="fas fa-user me-1"></i> Cliente:</strong>
+                            <p id="modalClientName" class="mb-0"></p>
+                        </div>
+                        <div class="col-md-6">
+                            <strong><i class="fas fa-user-tie me-1"></i> Vendedor:</strong>
+                            <p id="modalEmployeeName" class="mb-0"></p>
+                        </div>
+                        <div class="col-md-6 mt-2">
+                            <strong><i class="fas fa-calendar-alt me-1"></i> Fecha:</strong>
+                            <p id="modalDate" class="mb-0"></p>
+                        </div>
+                    </div>
+
+                    <h6 class="border-top pt-3">Artículos Vendidos</h6>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-bordered">
+                            <thead class="table-light">
+                            <tr>
+                                <th>Artículo</th>
+                                <th class="text-end">Cantidad</th>
+                                <th class="text-end">Precio Unit.</th>
+                                <th class="text-end">Total</th>
+                            </tr>
+                            </thead>
+                            <tbody id="modalDetailsTbody">
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="row justify-content-end mt-3">
+                        <div class="col-md-6">
+                            <ul class="list-group">
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <span>Subtotal:</span>
+                                    <strong id="modalSubTotal"></strong>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <span>IVA (19%):</span>
+                                    <strong id="modalTax"></strong>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between bg-light">
+                                    <span class="fw-bold">TOTAL:</span>
+                                    <strong id="modalTotal" class="text-black fw-bold"></strong>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </div>
 </body>
