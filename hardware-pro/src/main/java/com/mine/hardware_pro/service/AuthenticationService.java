@@ -22,7 +22,7 @@ public class AuthenticationService {
 
     public void register(RegisterRequest request) {
         // Encontrar el rol por defecto (por ejemplo, "USER")
-        Role defaultRole = roleRepository.findByName("ADMIN").orElseThrow(() -> new RuntimeException("Rol no encontrado"));
+        Role defaultRole = roleRepository.findByName("USER").orElseThrow(() -> new RuntimeException("Rol por defecto 'USER' no encontrado"));
 
         User user = User.builder()
                 .firstName(request.getFirstName())
