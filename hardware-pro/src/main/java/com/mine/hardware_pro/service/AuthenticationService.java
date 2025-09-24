@@ -20,18 +20,27 @@ public class AuthenticationService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public void register(RegisterRequest request) {
-        // Encontrar el rol por defecto (por ejemplo, "USER")
+    public boolean register(RegisterRequest request) {
+        // 1. Verificamos si el email ya existe en la base de datos
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+            // Si el Optional contiene un usuario, significa que el email ya está en uso.
+            return false; // Devolvemos 'false' para indicar que el registro falló.
+        }
+
+        // Si el correo no existe, continuamos con el proceso de registro normal...
         Role defaultRole = roleRepository.findByName("USER").orElseThrow(() -> new RuntimeException("Rol por defecto 'USER' no encontrado"));
 
         User user = User.builder()
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword())) // Encriptar la contraseña
-                .role(defaultRole) // Asignar el rol por defecto
+                .password(passwordEncoder.encode(request.getPassword()))
+                .role(defaultRole)
                 .build();
 
         userRepository.save(user);
+
+        // 2. Si todo sale bien y el usuario se guarda, se devuelve true.
+        return true;
     }
 }

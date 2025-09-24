@@ -46,9 +46,17 @@ public class AuthController {
 
     @PostMapping("/register")
     public String registerUser(@ModelAttribute RegisterRequest registerRequest) {
-        authService.register(registerRequest);
+        // Llamamos al método modificado que ahora devuelve un booleano
+        boolean isRegistrationSuccessful = authService.register(registerRequest);
 
-        return "redirect:/login?registerSuccess";
+        if (isRegistrationSuccessful) {
+            // Si el registro fue exitoso, lo mandamos al login con un mensaje de éxito.
+            return "redirect:/login?registerSuccess";
+        } else {
+            // Si falló (porque el email ya existía), lo devolvemos a la página de registro
+            // con un parámetro de error en la URL.
+            return "redirect:/register?error";
+        }
     }
 
     // Ruta para mostrar el formulario de "olvidé mi contraseña"
