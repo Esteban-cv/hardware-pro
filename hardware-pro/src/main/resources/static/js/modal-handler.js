@@ -1,29 +1,37 @@
 $(document).ready(function() {
 
-    // Instancia los modals una sola vez al cargar la página
+    // Instancia los modals una sola vez al cargar la página para ser más eficiente
     const saleDetailsModal = document.getElementById('saleDetailsModal') ? new bootstrap.Modal(document.getElementById('saleDetailsModal')) : null;
-    // const clientDetailsModal = new bootstrap.Modal... (para futuros modals)
+    const articleDetailsModal = document.getElementById('articleDetailsModal') ? new bootstrap.Modal(document.getElementById('articleDetailsModal')) : null;
 
-    // Selector genérico para CUALQUIER botón de ver
+    // Selector genérico para CUALQUIER botón de ver en la página
     $('body').on('click', '.btn-view', function() {
         const type = $(this).data('type');
         const id = $(this).data('id');
         let url = '';
 
-        // Decide qué URL usar
-        if (type === 'sale') url = '/sales/view/' + id;
-        // else if (type === 'client') url = '/clients/view/' + id;
+        // Decide qué URL usar basándose en el 'type' del botón
+        if (type === 'sale') {
+            url = '/sales/view/' + id;
+        } else if (type === 'article') {
+            url = '/articles/view/' + id;
+        }
+        // ... aquí puedes añadir 'else if' para futuros modals (clientes, etc.)
 
         if (!url) return;
 
-        // Petición AJAX
+        // Petición AJAX para obtener los datos
         $.ajax({
             url: url,
             method: 'GET',
             success: function(data) {
-                // Llama a la función correcta para poblar el modal
-                if (type === 'sale') populateSaleModal(data);
-                // else if (type === 'client') populateClientModal(data);
+                // Llama a la función correcta para poblar el modal correspondiente
+                if (type === 'sale') {
+                    populateSaleModal(data);
+                } else if (type === 'article') {
+                    // CORRECCIÓN AQUÍ: Llamamos a la función para artículos
+                    populateArticleModal(data);
+                }
             },
             error: function() {
                 Swal.fire('Error', 'No se pudieron cargar los detalles.', 'error');
@@ -41,12 +49,14 @@ $(document).ready(function() {
 
         const formatCurrency = (num) => new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(num);
 
-        // Llenar datos
         $('#modalSaleId').text(data.idSale);
         $('#modalClientName').text(data.clientName);
         $('#modalEmployeeName').text(data.employeeName);
         $('#modalDate').text(data.date);
-        $('#modalObservation').text(data.observations)
+
+        // Suponiendo que tienes un span con id="modalObservations"
+        const observations = data.observations || 'N/A';
+        $('#modalObservations').text(observations);
 
         $('#modalSubTotal').text(formatCurrency(data.subTotal));
         $('#modalTax').text(formatCurrency(data.tax));
@@ -64,23 +74,28 @@ $(document).ready(function() {
             detailsTbody.append(row);
         });
 
-        // Mostrar el modal
         saleDetailsModal.show();
     }
 
-    // Función para poblar el modal de Clientes (EJEMPLO)
-    function populateClientModal(data) {
-        var clientDetailsModal = new bootstrap.Modal(document.getElementById('clientDetailsModal'));
+    // ===============================================================
+    // FUNCIÓN NUEVA PARA POBLAR EL MODAL DE ARTÍCULOS
+    // ===============================================================
+    function populateArticleModal(data) {
+        if (!articleDetailsModal) return;
 
-        // Llenarías aquí los campos del modal de cliente
-        // Ejemplo: $('#modalClientDocument').text(data.document);
-        // Ejemplo: $('#modalClientEmail').text(data.email);
+        const formatCurrency = (num) => new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(num);
 
-        clientDetailsModal.show();
-    }
+        // Llenar los campos del modal de artículo
+        // Asegúrate de que los IDs coincidan con tu modal de artículos HTML
+        $('#modalArticleId').text(data.idArticle);
+        $('#modalArticleName').text(data.name);
+        $('#modalArticleCode').text(data.code);
+        $('#modalArticleCategory').text(data.categoryName);
+        $('#modalArticleSupplier').text(data.supplierName);
+        $('#modalArticleUnit').text(data.unitName);
+        $('#modalArticlePrice').text(formatCurrency(data.price));
+        $('#modalArticleStock').text(data.quantity + ' unidades');
 
-    // Función para poblar el modal de Productos (EJEMPLO)
-    function populateProductModal(data) {
-        // Lógica para el modal de productos...
+        articleDetailsModal.show();
     }
 });

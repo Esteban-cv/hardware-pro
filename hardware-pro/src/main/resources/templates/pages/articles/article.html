@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<body>
+<div layout:fragment="content">
+    <div class="page-title">
+        <h3>Gestión de Artículos</h3>
+        <p class="text-subtitle text-muted">Gestiona fácilmente los artículos registrados: consulta, edita o elimina según sea necesario.</p>
+    </div>
+
+    <section class="section">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex flex-wrap gap-2">
+                    <a th:href="@{/articles/form}" class="btn btn-primary">
+                        <i class="fas fa-plus-circle me-1"></i> Nuevo Artículo
+                    </a>
+                    <a th:href="@{/articles/salereport}" class="btn btn-danger">
+                        <i class="fas fa-file-pdf me-1"></i> PDF
+                    </a>
+                    <a th:href="@{/articles/salereport/excel}" class="btn btn-success">
+                        <i class="fas fa-file-excel me-1"></i> EXCEL
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover" id="myTable">
+                        <thead class="text-center">
+                        <tr>
+                            <th>ID</th>
+                            <th>NOMBRE</th>
+                            <th>CATEGORÍA</th>
+                            <th>UNIDAD</th>
+                            <th>PRECIO</th>
+                            <th>ACCIONES</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="article : ${articles}">
+                            <td th:text="${article.idArticle}"></td>
+                            <td th:text="${article.name}"></td>
+                            <td th:text="${article.category.name != null ? article.category.name : 'N/A'}"></td>
+                            <td th:text="${article.unit.name != null ? article.unit.name : 'N/A'}"></td>
+                            <td th:text="'$' + ${#numbers.formatDecimal(article.price, 1, 'COMMA', 2, 'POINT')}"></td>
+                            <td>
+                                <div class="d-flex gap-1">
+                                    <button class="btn btn-info btn-sm btn-view" th:data-id="${article.idArticle}" data-type="article" title="Ver Detalles">
+                                        <i data-feather="eye"></i>
+                                    </button>
+                                    <a th:href="@{'/articles/edit/' + ${article.idArticle}}" class="btn btn-warning btn-sm" title="Editar">
+                                        <i data-feather="edit"></i>
+                                    </a>
+                                    <form th:action="@{'/articles/delete/' + ${article.idArticle}}" method="post" class="form-delete">
+                                        <button type="submit" class="btn btn-danger btn-sm" title="Eliminar">
+                                            <i data-feather="trash-2"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="modal fade" id="articleDetailsModal" tabindex="-1" aria-labelledby="articleDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="articleDetailsModalLabel">
+                        <i class="fas fa-box me-2"></i>Detalles del Artículo
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h4 class="mb-1" id="modalArticleName"></h4>
+                    <p class="text-muted mb-3">
+                        ID: <span id="modalArticleId" class="fw-bold"></span> |
+                        Código: <span id="modalArticleCode" class="fw-bold"></span>
+                    </p>
+
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Categoría:</span>
+                            <strong id="modalArticleCategory"></strong>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Proveedor:</span>
+                            <strong id="modalArticleSupplier"></strong>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Unidad de Medida:</span>
+                            <strong id="modalArticleUnit"></strong>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Stock Actual:</span>
+                            <strong id="modalArticleStock" class="badge bg-secondary fs-6"></strong>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span class="fs-5">Precio de Artículo:</span>
+                            <strong id="modalArticlePrice" class="fs-5 text-success fw-bold"></strong>
+                        </li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
