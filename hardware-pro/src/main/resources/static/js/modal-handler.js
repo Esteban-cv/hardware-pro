@@ -46,6 +46,7 @@ $(document).ready(function() {
         $('#modalClientName').text(data.clientName);
         $('#modalEmployeeName').text(data.employeeName);
         $('#modalDate').text(data.date);
+        $('#modalObservation').text(data.observations)
 
         $('#modalSubTotal').text(formatCurrency(data.subTotal));
         $('#modalTax').text(formatCurrency(data.tax));
