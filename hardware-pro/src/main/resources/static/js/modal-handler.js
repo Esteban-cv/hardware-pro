@@ -3,6 +3,7 @@ $(document).ready(function() {
     // Instancia los modals una sola vez al cargar la página para ser más eficiente
     const saleDetailsModal = document.getElementById('saleDetailsModal') ? new bootstrap.Modal(document.getElementById('saleDetailsModal')) : null;
     const articleDetailsModal = document.getElementById('articleDetailsModal') ? new bootstrap.Modal(document.getElementById('articleDetailsModal')) : null;
+    const purchaseDetailsModal = document.getElementById('purchaseDetailsModal') ? new bootstrap.Modal(document.getElementById('purchaseDetailsModal')) : null;
 
     // Selector genérico para CUALQUIER botón de ver en la página
     $('body').on('click', '.btn-view', function() {
@@ -15,6 +16,8 @@ $(document).ready(function() {
             url = '/sales/view/' + id;
         } else if (type === 'article') {
             url = '/articles/view/' + id;
+        } else if (type === 'purchase') {
+            url = '/purchases/view/' + id;
         }
         // ... aquí puedes añadir 'else if' para futuros modals (clientes, etc.)
 
@@ -29,8 +32,9 @@ $(document).ready(function() {
                 if (type === 'sale') {
                     populateSaleModal(data);
                 } else if (type === 'article') {
-                    // CORRECCIÓN AQUÍ: Llamamos a la función para artículos
                     populateArticleModal(data);
+                } else if (type === 'purchase') {
+                    populatePurchaseModal(data);
                 }
             },
             error: function() {
@@ -78,7 +82,7 @@ $(document).ready(function() {
     }
 
     // ===============================================================
-    // FUNCIÓN NUEVA PARA POBLAR EL MODAL DE ARTÍCULOS
+    // FUNCIÓN PARA POBLAR EL MODAL DE ARTÍCULOS
     // ===============================================================
     function populateArticleModal(data) {
         if (!articleDetailsModal) return;
@@ -86,7 +90,6 @@ $(document).ready(function() {
         const formatCurrency = (num) => new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(num);
 
         // Llenar los campos del modal de artículo
-        // Asegúrate de que los IDs coincidan con tu modal de artículos HTML
         $('#modalArticleId').text(data.idArticle);
         $('#modalArticleName').text(data.name);
         $('#modalArticleCode').text(data.code);
@@ -97,5 +100,42 @@ $(document).ready(function() {
         $('#modalArticleStock').text(data.quantity + ' unidades');
 
         articleDetailsModal.show();
+    }
+
+    // ===============================================================
+    // 4. FUNCIÓN NUEVA PARA POBLAR EL MODAL DE COMPRAS
+    // ===============================================================
+    function populatePurchaseModal(data) {
+        if (!purchaseDetailsModal) return;
+
+        const formatCurrency = (num) => new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(num);
+
+        // Llenar datos generales de la compra
+        $('#modalPurchaseId').text(data.idPurchase);
+        $('#modalPurchaseDate').text(data.date);
+        $('#modalPurchaseSupplier').text(data.supplierName);
+        $('#modalPurchaseEmployee').text(data.employeeName);
+
+        // Llenar el resumen financiero total
+        $('#modalPurchaseSubtotal').text(formatCurrency(data.subTotal));
+        $('#modalPurchaseTax').text(formatCurrency(data.tax));
+        $('#modalPurchaseTotal').text(formatCurrency(data.total));
+
+        // Llenar la tabla con la lista de artículos
+        const detailsTbody = $('#modalPurchaseDetailsTbody');
+        detailsTbody.empty(); // Limpiar la tabla antes de llenarla
+
+        data.details.forEach(detail => {
+            const row = `<tr>
+                       <td>${detail.articleName}</td>
+                       <td class="text-end">${detail.quantity}</td>
+                       <td class="text-end">${formatCurrency(detail.unitPrice)}</td>
+                       <td class="text-end">${formatCurrency(detail.total)}</td>
+                     </tr>`;
+            detailsTbody.append(row);
+        });
+
+        // Mostrar el modal
+        purchaseDetailsModal.show();
     }
 });

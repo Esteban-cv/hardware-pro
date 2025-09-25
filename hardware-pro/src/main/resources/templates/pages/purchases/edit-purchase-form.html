@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<body>
+<div layout:fragment="content">
+    <div class="page-title d-flex justify-content-between align-items-center">
+        <div>
+            <h3><i class="fas fa-edit me-2"></i>Editar Compra</h3>
+            <p class="text-subtitle text-muted">Solo se permite modificar la fecha.</p>
+        </div>
+        <a th:href="@{/purchases}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-1"></i>
+            Volver al listado
+        </a>
+    </div>
+
+    <section class="section">
+        <div class="card">
+            <div class="card-body">
+                <form id="editPurchaseForm" th:action="@{/purchases/edit/{id}(id=${purchase.idPurchase})}" method="post" th:object="${purchase}">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+                    <h4 class="card-title border-bottom pb-2 mb-3"><i class="fas fa-file-invoice me-2"></i>Información General (No editable)</h4>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label">Proveedor</label>
+                            <input type="text" class="form-control" th:value="${purchase.supplier.name}" readonly />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Registrado por</label>
+                            <input type="text" class="form-control" th:value="${purchase.employee.name}" readonly />
+                        </div>
+                    </div>
+
+                    <h4 class="card-title border-bottom pb-2 mb-3"><i class="fas fa-pencil-alt me-2"></i>Campo Editable</h4>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-4">
+                            <label for="date" class="form-label">Fecha de la Compra</label>
+                            <input type="date" id="date" class="form-control" required th:field="*{date}" />
+                        </div>
+                    </div>
+
+                    <h4 class="card-title border-bottom pb-2 mb-3"><i class="fas fa-boxes me-2"></i>Detalle de Productos Comprados (No editable)</h4>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-sm">
+                            <thead class="table-light">
+                            <tr>
+                                <th>Producto</th>
+                                <th class="text-end">Cantidad</th>
+                                <th class="text-end">Precio Unit. (Costo)</th>
+                                <th class="text-end">Total</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="detail : ${purchase.details}">
+                                <td th:text="${detail.article.name}"></td>
+                                <td class="text-end" th:text="${detail.quantity}"></td>
+                                <td class="text-end" th:text="'$' + ${#numbers.formatDecimal(detail.unitPrice, 1, 'COMMA', 2, 'POINT')}"></td>
+                                <td class="text-end" th:text="'$' + ${#numbers.formatDecimal(detail.total, 1, 'COMMA', 2, 'POINT')}"></td>
+                            </tr>
+                            <tr class="table-light">
+                                <td colspan="3" class="text-end fw-bold">Subtotal:</td>
+                                <td class="text-end fw-bold" th:text="'$' + ${#numbers.formatDecimal(purchase.subTotal, 1, 'COMMA', 2, 'POINT')}"></td>
+                            </tr>
+                            <tr class="table-light">
+                                <td colspan="3" class="text-end fw-bold">IVA (19%):</td>
+                                <td class="text-end fw-bold" th:text="'$' + ${#numbers.formatDecimal(purchase.tax, 1, 'COMMA', 2, 'POINT')}"></td>
+                            </tr>
+                            <tr class="table-primary">
+                                <td colspan="3" class="text-end fw-bold fs-5">Total General:</td>
+                                <td class="text-end fw-bold fs-5" th:text="'$' + ${#numbers.formatDecimal(purchase.total, 1, 'COMMA', 2, 'POINT')}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="mt-4 d-flex justify-content-end gap-2">
+                        <a th:href="@{/purchases}" class="btn btn-secondary">
+                            <i class="fas fa-times me-1"></i> Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-1"></i> Guardar Cambios
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+</html>
