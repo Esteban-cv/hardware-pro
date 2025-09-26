@@ -53,7 +53,25 @@
                         </ul>
                     </li>
 
+                    <li class="sidebar-item  has-sub">
 
+                        <a href="#" class='sidebar-link'>
+                            <i data-feather="clipboard" width="20"></i>
+                            <span>Compras</span>
+                        </a>
+
+
+                        <ul class="submenu ">
+
+                            <li>
+                                <a th:href="@{/purchases}">Consultar</a>
+                            </li>
+
+                            <li>
+                                <a th:href="@{/purchases/form}">Nueva Compra</a>
+                            </li>
+                        </ul>
+                    </li>
 
                     <li class="sidebar-item  has-sub">
 
@@ -75,26 +93,46 @@
                         </ul>
                     </li>
 
-
                     <li class="sidebar-item  has-sub">
 
                         <a href="#" class='sidebar-link'>
-                            <i data-feather="clipboard" width="20"></i>
-                            <span>Compras</span>
+                            <i data-feather="tag" width="20"></i>
+                            <span>Categorías</span>
                         </a>
 
 
                         <ul class="submenu ">
 
                             <li>
-                                <a th:href="@{/purchases}">Consultar</a>
+                                <a th:href="@{/categories}">Consultar</a>
                             </li>
 
                             <li>
-                                <a th:href="@{/purchases/form}">Nueva Compra</a>
+                                <a th:href="@{/categories/form}">Nueva Categoría</a>
                             </li>
                         </ul>
                     </li>
+
+                    <li class="sidebar-item  has-sub">
+
+                        <a href="#" class='sidebar-link'>
+                            <i data-feather="location" width="20"></i>
+                            <span>Ubicaciones</span>
+                        </a>
+
+
+                        <ul class="submenu ">
+
+                            <li>
+                                <a th:href="@{/categories}">Consultar</a>
+                            </li>
+
+                            <li>
+                                <a th:href="@{/categories/form}">Nueva Ubicación</a>
+                            </li>
+                        </ul>
+                    </li>
+
                 </ul>
             </div>
             <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>

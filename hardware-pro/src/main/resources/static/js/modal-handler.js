@@ -1,17 +1,13 @@
 $(document).ready(function() {
-
-    // Instancia los modals una sola vez al cargar la página para ser más eficiente
     const saleDetailsModal = document.getElementById('saleDetailsModal') ? new bootstrap.Modal(document.getElementById('saleDetailsModal')) : null;
     const articleDetailsModal = document.getElementById('articleDetailsModal') ? new bootstrap.Modal(document.getElementById('articleDetailsModal')) : null;
     const purchaseDetailsModal = document.getElementById('purchaseDetailsModal') ? new bootstrap.Modal(document.getElementById('purchaseDetailsModal')) : null;
 
-    // Selector genérico para CUALQUIER botón de ver en la página
     $('body').on('click', '.btn-view', function() {
         const type = $(this).data('type');
         const id = $(this).data('id');
         let url = '';
 
-        // Decide qué URL usar basándose en el 'type' del botón
         if (type === 'sale') {
             url = '/sales/view/' + id;
         } else if (type === 'article') {
@@ -19,16 +15,13 @@ $(document).ready(function() {
         } else if (type === 'purchase') {
             url = '/purchases/view/' + id;
         }
-        // ... aquí puedes añadir 'else if' para futuros modals (clientes, etc.)
 
         if (!url) return;
 
-        // Petición AJAX para obtener los datos
         $.ajax({
             url: url,
             method: 'GET',
             success: function(data) {
-                // Llama a la función correcta para poblar el modal correspondiente
                 if (type === 'sale') {
                     populateSaleModal(data);
                 } else if (type === 'article') {
@@ -46,8 +39,6 @@ $(document).ready(function() {
     // ===============================================================
     // FUNCIONES ESPECÍFICAS PARA CADA TIPO DE MODAL
     // ===============================================================
-
-    // Función para poblar el modal de Ventas
     function populateSaleModal(data) {
         if (!saleDetailsModal) return;
 
@@ -58,7 +49,6 @@ $(document).ready(function() {
         $('#modalEmployeeName').text(data.employeeName);
         $('#modalDate').text(data.date);
 
-        // Suponiendo que tienes un span con id="modalObservations"
         const observations = data.observations || 'N/A';
         $('#modalObservations').text(observations);
 
@@ -110,18 +100,15 @@ $(document).ready(function() {
 
         const formatCurrency = (num) => new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(num);
 
-        // Llenar datos generales de la compra
         $('#modalPurchaseId').text(data.idPurchase);
         $('#modalPurchaseDate').text(data.date);
         $('#modalPurchaseSupplier').text(data.supplierName);
         $('#modalPurchaseEmployee').text(data.employeeName);
 
-        // Llenar el resumen financiero total
         $('#modalPurchaseSubtotal').text(formatCurrency(data.subTotal));
         $('#modalPurchaseTax').text(formatCurrency(data.tax));
         $('#modalPurchaseTotal').text(formatCurrency(data.total));
 
-        // Llenar la tabla con la lista de artículos
         const detailsTbody = $('#modalPurchaseDetailsTbody');
         detailsTbody.empty(); // Limpiar la tabla antes de llenarla
 
@@ -135,7 +122,6 @@ $(document).ready(function() {
             detailsTbody.append(row);
         });
 
-        // Mostrar el modal
         purchaseDetailsModal.show();
     }
 });
