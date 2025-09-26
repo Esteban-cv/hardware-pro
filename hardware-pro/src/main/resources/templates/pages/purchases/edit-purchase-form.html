@@ -38,7 +38,8 @@
                     <div class="row g-3 mb-4">
                         <div class="col-md-4">
                             <label for="date" class="form-label">Fecha de la Compra</label>
-                            <input type="date" id="date" class="form-control" required th:field="*{date}" />
+                            <input type="date" id="date" name="date" class="form-control" required
+                                   th:value="${#temporals.format(purchase.date, 'yyyy-MM-dd')}" />
                         </div>
                     </div>
 

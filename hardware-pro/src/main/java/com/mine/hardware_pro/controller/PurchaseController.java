@@ -7,6 +7,7 @@ import com.mine.hardware_pro.repository.*;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,12 +33,17 @@ public class PurchaseController {
     @Autowired private ArticleRepository articleRepository;
     @Autowired private SupplierRepository supplierRepository;
     @Autowired private EmployeeRepository employeeRepository;
-    @Autowired private PurchaseDetailRepository purchaseDetailRepository;
 
     @GetMapping
-    public String listPurchases(Model model) {
-        List<Purchase> purchases = purchaseRepository.findAll(Sort.by("date").descending());
+    public String listPurchases(Model model, @RequestParam(name = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+                                @RequestParam(name = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        Sort sort = Sort.by("date").descending();
+        List<Purchase> purchases = (startDate != null && endDate != null) ?
+                purchaseRepository.findByDateBetween(startDate, endDate, sort) :
+                purchaseRepository.findAll(sort);
         model.addAttribute("purchases", purchases);
+        model.addAttribute("startDate", startDate);
+        model.addAttribute("endDate", endDate);
         return "pages/purchases/purchase";
     }
 
