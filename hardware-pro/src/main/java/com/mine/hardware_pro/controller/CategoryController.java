@@ -1,12 +1,9 @@
 package com.mine.hardware_pro.controller;
 
-import com.mine.hardware_pro.model.Article;
 import com.mine.hardware_pro.model.Category;
-import com.mine.hardware_pro.model.Sale;
 import com.mine.hardware_pro.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -71,23 +68,5 @@ public class CategoryController {
             ra.addFlashAttribute("error", "Hubo un error al eliminar la categoría.");
         }
         return "redirect:/categories";
-    }
-
-    @GetMapping("/view/{id}")
-    @ResponseBody
-    public ResponseEntity<Map<String, Object>> viewCategoryDetails(@PathVariable("id") Integer id) {
-        try {
-            Category category = categoryRepository.findById(id).orElse(null);
-            if (category == null) {
-                return ResponseEntity.notFound().build();
-            }
-            Map<String, Object> response = new HashMap<>();
-            response.put("type", "category");
-            response.put("idCategory", category.getIdCategory());
-            response.put("name", category.getName());
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
-        }
     }
 }
