@@ -43,10 +43,10 @@
                             <td th:text="${location.code}"></td>
                             <td>
                                 <div class="d-flex gap-1 justify-content-center">
-                                    <a th:href="@{'/categories/edit/' + ${location.idLocation}}" class="btn btn-warning btn-sm" title="Editar">
+                                    <a th:href="@{'/locations/edit/' + ${location.idLocation}}" class="btn btn-warning btn-sm" title="Editar">
                                         <i data-feather="edit"></i>
                                     </a>
-                                    <form th:action="@{'/categories/delete/' + ${location.idLocation}}" method="post" class="form-delete">
+                                    <form th:action="@{'/locations/delete/' + ${location.idLocation}}" method="post" class="form-delete">
                                         <button type="submit" class="btn btn-danger btn-sm" title="Eliminar">
                                             <i data-feather="trash-2"></i>
                                         </button>

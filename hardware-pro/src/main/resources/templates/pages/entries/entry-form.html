@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<body>
+<div layout:fragment="content">
+
+    <div class="page-title d-flex justify-content-between align-items-center">
+        <div>
+            <h3 th:if="${entry.idEntry == null}"><i class="fas fa-plus-circle me-2"></i>Registrar Nueva Entrada</h3>
+            <h3 th:unless="${entry.idEntry == null}"><i class="fas fa-edit me-2"></i>Editar Entrada</h3>
+            <p class="text-subtitle text-muted">Complete la información de la entrada de inventario.</p>
+        </div>
+        <a th:href="@{/entries}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-1"></i>
+            Volver al listado
+        </a>
+    </div>
+
+    <section class="section">
+        <div class="card">
+            <div class="card-body">
+                <form th:action="@{/entries/save}" th:object="${entry}" method="post">
+                    <input type="hidden" th:field="*{idEntry}" />
+
+                    <div class="row g-3">
+                        <div class="col-md-12">
+                            <label for="article" class="form-label">Artículo</label>
+                            <select id="article" class="form-select" th:field="*{article}" required>
+                                <option value="">Seleccione un artículo...</option>
+                                <option th:each="art : ${articles}" th:value="${art.idArticle}" th:text="${art.name}"></option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="quantity" class="form-label">Cantidad Ingresada</label>
+                            <input type="number" class="form-control" id="quantity" th:field="*{quantity}" required min="1">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="dateEntry" class="form-label">Fecha de Entrada</label>
+                            <input type="date" class="form-control" id="dateEntry" th:field="*{dateEntry}" required>
+                        </div>
+
+                        <div class="col-12">
+                            <label for="observations" class="form-label">Observaciones (Opcional)</label>
+                            <textarea class="form-control" id="observations" th:field="*{observations}" rows="3"></textarea>
+                        </div>
+
+                        <div class="col-12 d-flex justify-content-end gap-2 mt-4">
+                            <a th:href="@{/entries}" class="btn btn-secondary">Cancelar</a>
+                            <button type="submit" class="btn btn-primary">
+                                <span th:if="${entry.idEntry == null}"><i class="fas fa-save me-1"></i> Registrar Entrada</span>
+                                <span th:unless="${entry.idEntry == null}"><i class="fas fa-save me-1"></i> Guardar Cambios</span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+</div>
+</body>
+</html>

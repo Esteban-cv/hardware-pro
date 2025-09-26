@@ -133,6 +133,46 @@
                         </ul>
                     </li>
 
+                    <li class="sidebar-item  has-sub">
+
+                        <a href="#" class='sidebar-link'>
+                            <i data-feather="log-in" width="20"></i>
+                            <span>Entradas</span>
+                        </a>
+
+
+                        <ul class="submenu ">
+
+                            <li>
+                                <a th:href="@{/entries}">Consultar</a>
+                            </li>
+
+                            <li>
+                                <a th:href="@{/entries/form}">Nueva Entrada</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="sidebar-item  has-sub">
+
+                        <a href="#" class='sidebar-link'>
+                            <i data-feather="log-out" width="20"></i>
+                            <span>Salidas</span>
+                        </a>
+
+
+                        <ul class="submenu ">
+
+                            <li>
+                                <a th:href="@{/issues}">Consultar</a>
+                            </li>
+
+                            <li>
+                                <a th:href="@{/issues/form}">Nueva Ubicación</a>
+                            </li>
+                        </ul>
+                    </li>
+
                 </ul>
             </div>
             <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>

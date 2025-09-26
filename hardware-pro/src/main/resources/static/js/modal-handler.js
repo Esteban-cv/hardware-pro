@@ -2,6 +2,7 @@ $(document).ready(function() {
     const saleDetailsModal = document.getElementById('saleDetailsModal') ? new bootstrap.Modal(document.getElementById('saleDetailsModal')) : null;
     const articleDetailsModal = document.getElementById('articleDetailsModal') ? new bootstrap.Modal(document.getElementById('articleDetailsModal')) : null;
     const purchaseDetailsModal = document.getElementById('purchaseDetailsModal') ? new bootstrap.Modal(document.getElementById('purchaseDetailsModal')) : null;
+    const entryDetailsModal = document.getElementById('entryDetailsModal') ? new bootstrap.Modal(document.getElementById('entryDetailsModal')) : null;
 
     $('body').on('click', '.btn-view', function() {
         const type = $(this).data('type');
@@ -14,6 +15,8 @@ $(document).ready(function() {
             url = '/articles/view/' + id;
         } else if (type === 'purchase') {
             url = '/purchases/view/' + id;
+        } else if (type === 'entry') {
+            url = '/entries/view/' + id;
         }
 
         if (!url) return;
@@ -28,6 +31,8 @@ $(document).ready(function() {
                     populateArticleModal(data);
                 } else if (type === 'purchase') {
                     populatePurchaseModal(data);
+                } else if (type === 'entry') {
+                    populateEntryModal(data);
                 }
             },
             error: function() {
@@ -123,5 +128,20 @@ $(document).ready(function() {
         });
 
         purchaseDetailsModal.show();
+    }
+
+    // ===============================================================
+    // FUNCIÓN PARA POBLAR EL MODAL DE ENTRY
+    // ===============================================================
+    function populateEntryModal(data) {
+        if (!entryDetailsModal) return;
+
+        $('#modalEntryId').text(data.idEntry);
+        $('#modalEntryDate').text(data.date);
+        $('#modalEntryQuantity').text(data.quantity);
+        $('#modalEntryObservations').text(data.observations);
+        $('#modalEntryArticle').text(data.articleName);
+
+        entryDetailsModal.show();
     }
 });
