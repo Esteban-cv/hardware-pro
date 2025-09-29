@@ -3,6 +3,7 @@ $(document).ready(function() {
     const articleDetailsModal = document.getElementById('articleDetailsModal') ? new bootstrap.Modal(document.getElementById('articleDetailsModal')) : null;
     const purchaseDetailsModal = document.getElementById('purchaseDetailsModal') ? new bootstrap.Modal(document.getElementById('purchaseDetailsModal')) : null;
     const entryDetailsModal = document.getElementById('entryDetailsModal') ? new bootstrap.Modal(document.getElementById('entryDetailsModal')) : null;
+    const issueDetailsModal = document.getElementById('issueDetailsModal') ? new bootstrap.Modal(document.getElementById('issueDetailsModal')) : null;
 
     $('body').on('click', '.btn-view', function() {
         const type = $(this).data('type');
@@ -17,6 +18,8 @@ $(document).ready(function() {
             url = '/purchases/view/' + id;
         } else if (type === 'entry') {
             url = '/entries/view/' + id;
+        } else if (type === 'issue') {
+            url = '/issues/view/' + id;
         }
 
         if (!url) return;
@@ -33,6 +36,8 @@ $(document).ready(function() {
                     populatePurchaseModal(data);
                 } else if (type === 'entry') {
                     populateEntryModal(data);
+                } else if (type === 'issue') {
+                    populateIssueModal(data);
                 }
             },
             error: function() {
@@ -143,5 +148,22 @@ $(document).ready(function() {
         $('#modalEntryArticle').text(data.articleName);
 
         entryDetailsModal.show();
+    }
+
+    // ===============================================================
+    // FUNCIÓN PARA POBLAR EL MODAL DE ISSUE
+    // ===============================================================
+    function populateIssueModal(data) {
+        if (!issueDetailsModal) return;
+
+        $('#modalIssueId').text(data.idIssue);
+        $('#modalIssueDate').text(data.date);
+        $('#modalIssueQuantity').text(data.quantity);
+        $('#modalIssueObservations').text(data.observations);
+        $('#modalIssueArticle').text(data.articleName);
+        $('#modalIssueEmployee').text(data.employeeName);
+        $('#modalIssueClient').text(data.clientName);
+
+        issueDetailsModal.show();
     }
 });

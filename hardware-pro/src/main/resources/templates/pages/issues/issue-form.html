@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<body>
+<div layout:fragment="content">
+
+    <div class="page-title d-flex justify-content-between align-items-center">
+        <div>
+            <h3 th:if="${issue.idIssue == null}"><i class="fas fa-plus-circle me-2"></i>Registrar Nueva Salida</h3>
+            <h3 th:unless="${issue.idIssue == null}"><i class="fas fa-edit me-2"></i>Editar Salida</h3>
+            <p class="text-subtitle text-muted">Complete la información de la salida de inventario.</p>
+        </div>
+        <a th:href="@{/issues}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-1"></i>
+            Volver al listado
+        </a>
+    </div>
+
+    <section class="section">
+        <div class="card">
+            <div class="card-body">
+                <form th:action="@{/issues/save}" th:object="${issue}" method="post">
+                    <input type="hidden" th:field="*{idIssue}" />
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="article" class="form-label">Artículo</label>
+                            <select id="article" class="form-select" th:field="*{article}" required>
+                                <option value="">Seleccione un artículo...</option>
+                                <option th:each="art : ${articles}" th:value="${art.idArticle}" th:text="${art.name}"></option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="client" class="form-label">Cliente Destino</label>
+                            <select id="client" class="form-select" th:field="*{client}">
+                                <option value="">Seleccione un cliente...</option>
+                                <option th:each="cli : ${clients}" th:value="${cli.idClient}" th:text="${cli.name}"></option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="quantity" class="form-label">Cantidad Retirada</label>
+                            <input type="number" class="form-control" id="quantity" th:field="*{quantity}" required min="1">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="dateIssue" class="form-label">Fecha de Salida</label>
+                            <input type="date" class="form-control" id="dateIssue" th:field="*{dateIssue}" required>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="employee" class="form-label">Registrado por</label>
+                            <select id="employee" class="form-select" th:field="*{employee}" required>
+                                <option value="">Seleccione...</option>
+                                <option th:each="emp : ${employees}" th:value="${emp.idEmployee}" th:text="${emp.name}"></option>
+                            </select>
+                        </div>
+
+                        <div class="col-12">
+                            <label for="observations" class="form-label">Observaciones (Opcional)</label>
+                            <textarea class="form-control" id="observations" th:field="*{observations}" rows="3"></textarea>
+                        </div>
+
+                        <div class="col-12 d-flex justify-content-end gap-2 mt-4">
+                            <a th:href="@{/issues}" class="btn btn-secondary">Cancelar</a>
+                            <button type="submit" class="btn btn-primary">
+                                <span th:if="${issue.idIssue == null}"><i class="fas fa-save me-1"></i> Registrar Salida</span>
+                                <span th:unless="${issue.idIssue == null}"><i class="fas fa-save me-1"></i> Guardar Cambios</span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+</html>
