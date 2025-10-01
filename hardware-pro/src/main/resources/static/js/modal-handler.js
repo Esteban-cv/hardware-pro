@@ -182,10 +182,10 @@ $(document).ready(function() {
         $('#modalClientId').text(data.idClient);
         $('#modalClientName').text(data.name);
         $('#modalClientDocument').text(data.document);
-        $('#modalClientEmail').text(data.email);
-        $('#modalClientAddress').text(data.address);
-        $('#modalClientPhone').text(data.phone);
-        $('#modalClientRut').text(data.rut);
+        $('#modalClientEmail').text(data.email || 'N/A');
+        $('#modalClientAddress').text(data.address || 'N/A');
+        $('#modalClientPhone').text(data.phone || 'N/A');
+        $('#modalClientRut').text(data.rut || 'N/A');
 
         clientDetailsModal.show();
     }

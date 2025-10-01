@@ -32,7 +32,7 @@
                         <tr>
                             <th>ID</th>
                             <th>NOMBRE</th>
-                            <th>NUMERO CEDULA</th>
+                            <th>DOCUMENTO</th>
                             <th>CELULAR</th>
                             <th>ACCIONES</th>
                         </tr>
@@ -41,8 +41,8 @@
                         <tr th:each="client : ${clients}">
                             <td th:text="${client.idClient}"></td>
                             <td th:text="${client.name}"></td>
-                            <td th:text="${client.document}"></td>
-                            <td th:text="${client.phone}"></td>
+                            <td th:text="${client.document ?: 'N/A'}"></td>
+                            <td th:text="${client.phone ?: 'N/A'}"></td>
                             <td>
                                 <div class="d-flex gap-1 justify-content-center">
                                     <button class="btn btn-info btn-sm btn-view" th:data-id="${client.idClient}" data-type="client" title="Ver Detalles">
@@ -83,7 +83,7 @@
 
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item d-flex justify-content-between">
-                            <span>Numero de cédula:</span>
+                            <span>Documento:</span>
                             <strong id="modalClientDocument"></strong>
                         </li>
                         <li class="list-group-item d-flex justify-content-between">

@@ -87,9 +87,9 @@ public class ClientController {
             response.put("idClient", client.getIdClient());
             response.put("name", client.getName());
             response.put("document", client.getDocument());
-            response.put("email", client.getEmail());
-            response.put("address", client.getAddress());
-            response.put("phone", client.getPhone());
+            response.put("email", client.getEmail() != null ? client.getEmail() : "N/A");
+            response.put("address", client.getAddress() != null ? client.getAddress() : "N/A");
+            response.put("phone", client.getPhone() != null ? client.getPhone() : "N/A");
             response.put("rut", client.getRut() != null ? client.getRut() : "N/A");
 
             return ResponseEntity.ok(response);

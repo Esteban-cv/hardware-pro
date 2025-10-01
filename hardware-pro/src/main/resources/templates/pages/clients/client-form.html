@@ -1,10 +1,73 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
 
+<body>
+<div layout:fragment="content">
+
+    <div class="page-title d-flex justify-content-between align-items-center">
+        <div>
+            <h3 th:if="${client.idClient == null}"><i class="fas fa-user-plus me-2"></i>Crear Nuevo Cliente</h3>
+            <h3 th:unless="${client.idClient == null}"><i class="fas fa-edit me-2"></i>Editar Cliente</h3>
+            <p class="text-subtitle text-muted">Complete la información del cliente.</p>
+        </div>
+        <a th:href="@{/clients}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-1"></i>
+            Volver al listado
+        </a>
+    </div>
+
+    <section class="section">
+        <div class="card">
+            <div class="card-body">
+                <form th:action="@{/clients/save}" th:object="${client}" method="post">
+                    <input type="hidden" th:field="*{idClient}" />
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="name" class="form-label">Nombre Completo</label>
+                            <input type="text" class="form-control" id="name" th:field="*{name}" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="document" class="form-label">Documento (C.C / NIT)</label>
+                            <input type="text" class="form-control" id="document" th:field="*{document}" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="email" class="form-label">Correo Electrónico</label>
+                            <input type="email" class="form-control" id="email" th:field="*{email}">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="phone" class="form-label">Teléfono</label>
+                            <input type="text" class="form-control" id="phone" th:field="*{phone}">
+                        </div>
+
+                        <div class="col-12">
+                            <label for="address" class="form-label">Dirección</label>
+                            <input type="text" class="form-control" id="address" th:field="*{address}">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="rut" class="form-label">RUT (Opcional)</label>
+                            <input type="text" class="form-control" id="rut" th:field="*{rut}">
+                        </div>
+
+                        <div class="col-12 d-flex justify-content-end gap-2 mt-4">
+                            <a th:href="@{/clients}" class="btn btn-secondary">Cancelar</a>
+                            <button type="submit" class="btn btn-primary">
+                                <span th:if="${client.idClient == null}"><i class="fas fa-save me-1"></i> Crear Cliente</span>
+                                <span th:unless="${client.idClient == null}"><i class="fas fa-save me-1"></i> Guardar Cambios</span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+</div>
 </body>
 </html>
