@@ -96,6 +96,26 @@
                     <li class="sidebar-item  has-sub">
 
                         <a href="#" class='sidebar-link'>
+                            <i data-feather="archive" width="20"></i>
+                            <span>Inventario</span>
+                        </a>
+
+
+                        <ul class="submenu ">
+
+                            <li>
+                                <a th:href="@{/inventories}">Consultar</a>
+                            </li>
+
+                            <li>
+                                <a th:href="@{/inventories/form}">Nuevo Inventario</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="sidebar-item  has-sub">
+
+                        <a href="#" class='sidebar-link'>
                             <i data-feather="tag" width="20"></i>
                             <span>Categorías</span>
                         </a>

@@ -5,6 +5,7 @@ $(document).ready(function() {
     const entryDetailsModal = document.getElementById('entryDetailsModal') ? new bootstrap.Modal(document.getElementById('entryDetailsModal')) : null;
     const issueDetailsModal = document.getElementById('issueDetailsModal') ? new bootstrap.Modal(document.getElementById('issueDetailsModal')) : null;
     const clientDetailsModal = document.getElementById('clientDetailsModal') ? new bootstrap.Modal(document.getElementById('clientDetailsModal')) : null;
+    const inventoryDetailsModal = document.getElementById('inventoryDetailsModal') ? new bootstrap.Modal(document.getElementById('inventoryDetailsModal')) : null;
 
     $('body').on('click', '.btn-view', function() {
         const type = $(this).data('type');
@@ -23,6 +24,8 @@ $(document).ready(function() {
             url = '/issues/view/' + id;
         } else if (type === 'client') {
             url = '/clients/view/' + id;
+        } else if (type === 'inventory') {
+            url = '/inventories/view/' + id;
         }
 
         if (!url) return;
@@ -43,6 +46,8 @@ $(document).ready(function() {
                     populateIssueModal(data);
                 } else if (type === 'client') {
                     populateClientModal(data);
+                } else if (type === 'inventory') {
+                    populateInventoryModal(data);
                 }
             },
             error: function() {
@@ -187,5 +192,21 @@ $(document).ready(function() {
         $('#modalClientRut').text(data.rut || 'N/A');
 
         clientDetailsModal.show();
+    }
+
+    // ===============================================================
+    // FUNCIÓN PARA POBLAR EL MODAL DE INVENTARIO
+    // ===============================================================
+    function populateInventoryModal(data) {
+        if (!inventoryDetailsModal) return;
+
+        $('#modalInventoryId').text(data.idInventory);
+        $('#modalInventoryArticle').text(data.articleName || 'N/A');
+        $('#modalInventoryLocation').text(data.locationName || 'N/A');
+        $('#modalInventoryCurrentStock').text(data.currentStock + ' unidades');
+        $('#modalInventoryMinStock').text(data.minimumStock + ' unidades');
+        $('#modalInventoryUpdateDate').text(data.updatingDate || 'N/A');
+
+        inventoryDetailsModal.show();
     }
 });

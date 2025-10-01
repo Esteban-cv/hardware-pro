@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<body>
+<div layout:fragment="content">
+    <div class="page-title d-flex justify-content-between align-items-center">
+        <div>
+            <h3 th:if="${inventory.idInventory == null}"><i class="fas fa-warehouse me-2"></i>Crear Nuevo Registro de Inventario</h3>
+            <h3 th:unless="${inventory.idInventory == null}"><i class="fas fa-edit me-2"></i>Editar Registro de Inventario</h3>
+            <p class="text-subtitle text-muted">Complete la información del inventario para un artículo en una ubicación.</p>
+        </div>
+        <a th:href="@{/inventories}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-1"></i>
+            Volver al listado
+        </a>
+    </div>
+
+    <section class="section">
+        <div class="card">
+            <div class="card-body">
+                <form th:action="@{/inventories/save}" th:object="${inventory}" method="post">
+                    <input type="hidden" th:field="*{idInventory}" />
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="article" class="form-label">Artículo</label>
+                            <select id="article" class="form-select" th:field="*{article}" required>
+                                <option value="">Seleccione un artículo...</option>
+                                <option th:each="art : ${articles}"
+                                        th:value="${art.idArticle}"
+                                        th:text="${art.name}"
+                                        th:data-stock="${art.quantity}">
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="location" class="form-label">Ubicación</label>
+                            <select id="location" class="form-select" th:field="*{location}" required>
+                                <option value="">Seleccione una ubicación...</option>
+                                <option th:each="loc : ${locations}" th:value="${loc.idLocation}" th:text="${loc.name}"></option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="currentStock" class="form-label">Stock Actual</label>
+                            <input type="number" class="form-control" id="currentStock" th:field="*{currentStock}" min="0" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="minimumStock" class="form-label">Stock Mínimo</label>
+                            <input type="number" class="form-control" id="minimumStock" th:field="*{minimumStock}" min="0" required>
+                        </div>
+
+                        <div class="col-12 d-flex justify-content-end gap-2 mt-4">
+                            <a th:href="@{/inventories}" class="btn btn-secondary">Cancelar</a>
+                            <button type="submit" class="btn btn-primary">
+                                <span th:if="${inventory.idInventory == null}"><i class="fas fa-save me-1"></i> Crear Registro</span>
+                                <span th:unless="${inventory.idInventory == null}"><i class="fas fa-save me-1"></i> Guardar Cambios</span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</div>
+
+<th:block layout:fragment="scripts">
+    <script th:src="@{/js/inventory-form.js}"></script>
+</th:block>
+</body>
+</html>

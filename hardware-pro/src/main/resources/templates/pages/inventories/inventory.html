@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+<body>
+<div layout:fragment="content">
+    <div class="page-title">
+        <h3>Gestión de Inventario</h3>
+        <p class="text-subtitle text-muted">Consulta y gestiona el stock de tus artículos en diferentes ubicaciones.</p>
+    </div>
+
+    <section class="section">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex flex-wrap gap-2">
+                    <a th:href="@{/inventories/form}" class="btn btn-primary">
+                        <i class="fas fa-plus-circle me-1"></i> Nuevo Registro de Inventario
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover" id="myTable">
+                        <thead class="text-center">
+                        <tr>
+                            <th>ID</th>
+                            <th>ARTICULO</th>
+                            <th>STOCK ACTUAL</th>
+                            <th>STOCK MINIMO</th>
+                            <th>ACCIONES</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="inventory : ${inventories}">
+                            <td th:text="${inventory.idInventory}"></td>
+                            <td th:text="${inventory.article?.name}"></td>
+                            <td th:text="${inventory.currentStock}"></td>
+                            <td th:text="${inventory.minimumStock}"></td>
+                            <td>
+                                <div class="d-flex gap-1 justify-content-center">
+                                    <button class="btn btn-info btn-sm btn-view" th:data-id="${inventory.idInventory}" data-type="inventory" title="Ver Detalles">
+                                        <i data-feather="eye"></i>
+                                    </button>
+                                    <a th:href="@{'/inventories/edit/' + ${inventory.idInventory}}" class="btn btn-warning btn-sm" title="Editar">
+                                        <i data-feather="edit"></i>
+                                    </a>
+                                    <form th:action="@{'/inventories/delete/' + ${inventory.idInventory}}" method="post" class="form-delete">
+                                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                                        <button type="submit" class="btn btn-danger btn-sm" title="Eliminar">
+                                            <i data-feather="trash-2"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="modal fade" id="inventoryDetailsModal" tabindex="-1" aria-labelledby="inventoryDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-info text-white">
+                    <h5 class="modal-title" id="inventoryDetailsModalLabel"><i class="fas fa-boxes me-2"></i>Detalles de Inventario</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <dl class="row">
+                        <dt class="col-sm-4">ID:</dt>
+                        <dd class="col-sm-8"><strong id="modalInventoryId"></strong></dd>
+
+                        <dt class="col-sm-4">Artículo:</dt>
+                        <dd class="col-sm-8"><span id="modalInventoryArticle"></span></dd>
+
+                        <dt class="col-sm-4">Ubicación:</dt>
+                        <dd class="col-sm-8"><span id="modalInventoryLocation"></span></dd>
+
+                        <dt class="col-sm-4">Stock Actual:</dt>
+                        <dd class="col-sm-8"><strong id="modalInventoryCurrentStock"></strong> unidades</dd>
+
+                        <dt class="col-sm-4">Stock Mínimo:</dt>
+                        <dd class="col-sm-8"><span id="modalInventoryMinStock"></span> unidades</dd>
+
+                        <dt class="col-sm-4">Última Actualización:</dt>
+                        <dd class="col-sm-8"><span id="modalInventoryUpdateDate"></span></dd>
+                    </dl>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -20,7 +20,7 @@ public class SupplierController {
 
     @GetMapping
     public String listSuppliers(Model model) {
-        List<Supplier> suppliers = supplierRepository.findAll(Sort.by("idSupplier"));
+        List<Supplier> suppliers = supplierRepository.findAll(Sort.by("idSupplier").descending());
         model.addAttribute("suppliers", suppliers);
         return "pages/suppliers/supplier";
     }
