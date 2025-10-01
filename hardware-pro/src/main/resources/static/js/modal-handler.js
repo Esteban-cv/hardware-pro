@@ -3,7 +3,9 @@ $(document).ready(function() {
     const articleDetailsModal = document.getElementById('articleDetailsModal') ? new bootstrap.Modal(document.getElementById('articleDetailsModal')) : null;
     const purchaseDetailsModal = document.getElementById('purchaseDetailsModal') ? new bootstrap.Modal(document.getElementById('purchaseDetailsModal')) : null;
     const entryDetailsModal = document.getElementById('entryDetailsModal') ? new bootstrap.Modal(document.getElementById('entryDetailsModal')) : null;
-    const issueDetailsModal = document.getElementById('issueDetailsModal') ? new bootstrap.Modal(document.getElementById('issueDetailsModal')) : null;
+    const issueDetailsModal = document.getElementById('issueDetailsModal') ? new
+    bootstrap.Modal(document.getElementById('issueDetailsModal')) : null;
+    const clientDetailsModal = document.getElementById('clientDetailsModal') ? new bootstrap.Modal(document.getElementById('clientDetailsModal')) : null;
 
     $('body').on('click', '.btn-view', function() {
         const type = $(this).data('type');
@@ -20,6 +22,8 @@ $(document).ready(function() {
             url = '/entries/view/' + id;
         } else if (type === 'issue') {
             url = '/issues/view/' + id;
+        } else if (type === 'client') {
+            url = '/clients/view/' + id;
         }
 
         if (!url) return;
@@ -38,6 +42,8 @@ $(document).ready(function() {
                     populateEntryModal(data);
                 } else if (type === 'issue') {
                     populateIssueModal(data);
+                } else if (type === 'client') {
+                    populateClientModal(data);
                 }
             },
             error: function() {
@@ -165,5 +171,22 @@ $(document).ready(function() {
         $('#modalIssueClient').text(data.clientName);
 
         issueDetailsModal.show();
+    }
+
+    // ===============================================================
+    // FUNCIÓN PARA POBLAR EL MODAL DE CLIENT
+    // ===============================================================
+    function populateClientModal(data) {
+        if (!clientDetailsModal) return;
+
+        $('#modalClientId').text(data.idClient);
+        $('#modalClientName').text(data.name);
+        $('#modalClientDocument').text(data.document);
+        $('#modalClientEmail').text(data.email);
+        $('#modalClientAddress').text(data.address);
+        $('#modalClientPhone').text(data.phone);
+        $('#modalClientRut').text(data.rut);
+
+        clientDetailsModal.show();
     }
 });

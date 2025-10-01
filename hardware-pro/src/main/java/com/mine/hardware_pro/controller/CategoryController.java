@@ -4,15 +4,12 @@ import com.mine.hardware_pro.model.Category;
 import com.mine.hardware_pro.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/categories")
@@ -52,7 +49,7 @@ public class CategoryController {
     public String editCategory(@PathVariable("id") Integer idCategory, Model model, RedirectAttributes ra) {
         Category category = categoryRepository.findById(idCategory).orElse(null);
         if (category == null) {
-            ra.addFlashAttribute("error", "Categoría no encontrado");
+            ra.addFlashAttribute("error", "Categoría no encontrada");
             return "redirect:/categories";
         }
         model.addAttribute("category", category);
