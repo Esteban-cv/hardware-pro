@@ -3,8 +3,7 @@ $(document).ready(function() {
     const articleDetailsModal = document.getElementById('articleDetailsModal') ? new bootstrap.Modal(document.getElementById('articleDetailsModal')) : null;
     const purchaseDetailsModal = document.getElementById('purchaseDetailsModal') ? new bootstrap.Modal(document.getElementById('purchaseDetailsModal')) : null;
     const entryDetailsModal = document.getElementById('entryDetailsModal') ? new bootstrap.Modal(document.getElementById('entryDetailsModal')) : null;
-    const issueDetailsModal = document.getElementById('issueDetailsModal') ? new
-    bootstrap.Modal(document.getElementById('issueDetailsModal')) : null;
+    const issueDetailsModal = document.getElementById('issueDetailsModal') ? new bootstrap.Modal(document.getElementById('issueDetailsModal')) : null;
     const clientDetailsModal = document.getElementById('clientDetailsModal') ? new bootstrap.Modal(document.getElementById('clientDetailsModal')) : null;
 
     $('body').on('click', '.btn-view', function() {
