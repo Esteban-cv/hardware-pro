@@ -1,10 +1,58 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
 
+<body>
+<div layout:fragment="content">
+
+    <div class="page-title d-flex justify-content-between align-items-center">
+        <div>
+            <h3 th:if="${supplier.idSupplier == null}"><i class="fas fa-plus-circle me-2"></i>Crear Nuevo Proveedor</h3>
+            <h3 th:unless="${supplier.idSupplier == null}"><i class="fas fa-edit me-2"></i>Editar Proveedor</h3>
+            <p class="text-subtitle text-muted">Complete la información del proveedor.</p>
+        </div>
+        <a th:href="@{/suppliers}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-1"></i>
+            Volver al listado
+        </a>
+    </div>
+
+    <section class="section">
+        <div class="card">
+            <div class="card-body">
+                <form th:action="@{/suppliers/save}" th:object="${supplier}" method="post">
+                    <input type="hidden" th:field="*{idSupplier}" />
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="name" class="form-label">Nombre de la Empresa</label>
+                            <input type="text" class="form-control" id="name" th:field="*{name}" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="document" class="form-label">Documento (NIT)</label>
+                            <input type="text" class="form-control" id="document" th:field="*{document}">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="phone" class="form-label">Teléfono</label>
+                            <input type="number" class="form-control" id="phone" th:field="*{phone}">
+                        </div>
+
+                        <div class="col-12 d-flex justify-content-end gap-2 mt-4">
+                            <a th:href="@{/suppliers}" class="btn btn-secondary">Cancelar</a>
+                            <button type="submit" class="btn btn-primary">
+                                <span th:if="${supplier.idSupplier == null}"><i class="fas fa-save me-1"></i> Crear Proveedor</span>
+                                <span th:unless="${supplier.idSupplier == null}"><i class="fas fa-save me-1"></i> Guardar Cambios</span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+</div>
 </body>
 </html>
