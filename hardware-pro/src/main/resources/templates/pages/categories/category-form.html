@@ -1,10 +1,47 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
 
+<body>
+<div layout:fragment="content">
+    <div class="page-title d-flex justify-content-between align-items-center">
+        <div>
+            <h3 th:if="${category.idCategory == null}"><i class="fas fa-plus-circle me-2"></i>Crear Nueva Categoría</h3>
+            <h3 th:unless="${category.idCategory == null}"><i class="fas fa-edit me-2"></i>Editar Categoría</h3>
+            <p class="text-subtitle text-muted">Complete la información de la categoría.</p>
+        </div>
+        <a th:href="@{/categories}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-1"></i>
+            Volver al listado
+        </a>
+    </div>
+
+    <section class="section">
+        <div class="card">
+            <div class="card-body">
+                <form th:action="@{/categories/save}" th:object="${category}" method="post">
+                    <input type="hidden" th:field="*{idCategory}" />
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="name" class="form-label">Nombre de la Categoría</label>
+                            <input type="text" class="form-control" id="name" th:field="*{name}" required>
+                        </div>
+
+                        <div class="col-12 d-flex justify-content-end gap-2 mt-4">
+                            <a th:href="@{/categories}" class="btn btn-secondary">Cancelar</a>
+                            <button type="submit" class="btn btn-primary">
+                                <span th:if="${category.idCategory == null}"><i class="fas fa-save me-1"></i> Crear Categoría</span>
+                                <span th:unless="${category.idCategory == null}"><i class="fas fa-save me-1"></i> Guardar Cambios</span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+</div>
 </body>
 </html>

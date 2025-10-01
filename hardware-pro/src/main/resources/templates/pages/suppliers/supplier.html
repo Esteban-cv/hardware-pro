@@ -6,21 +6,21 @@
 <body>
 <div layout:fragment="content">
     <div class="page-title">
-        <h3>Gestión de Categorías</h3>
-        <p class="text-subtitle text-muted">Gestiona fácilmente las categorías registradas: consulta, edita o elimina según sea necesario.</p>
+        <h3>Gestión de Proveedores</h3>
+        <p class="text-subtitle text-muted">Gestiona fácilmente los proveedores registrados: consulta, edita o elimina según sea necesario.</p>
     </div>
 
     <section class="section">
         <div class="card">
             <div class="card-header">
                 <div class="d-flex flex-wrap gap-2">
-                    <a th:href="@{/categories/form}" class="btn btn-primary">
-                        <i data-feather="plus-circle"></i> Nueva Categoría
+                    <a th:href="@{/suppliers/form}" class="btn btn-primary">
+                        <i data-feather="plus-circle"></i> Nuevo Proveedor
                     </a>
-                    <a th:href="@{/categories/salereport}" class="btn btn-danger">
+                    <a th:href="@{/suppliers/salereport}" class="btn btn-danger">
                         <i class="fas fa-file-pdf me-1"></i> PDF
                     </a>
-                    <a th:href="@{/categories/salereport/excel}" class="btn btn-success">
+                    <a th:href="@{/suppliers/salereport/excel}" class="btn btn-success">
                         <i class="fas fa-file-excel me-1"></i> EXCEL
                     </a>
                 </div>
@@ -32,19 +32,23 @@
                         <tr>
                             <th>ID</th>
                             <th>NOMBRE</th>
+                            <th>DOCUMENTO</th>
+                            <th>TELÉFONO</th>
                             <th>ACCIONES</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="category : ${categories}">
-                            <td th:text="${category.idCategory}"></td>
-                            <td th:text="${category.name}"></td>
+                        <tr th:each="supplier : ${suppliers}">
+                            <td th:text="${supplier.idSupplier}"></td>
+                            <td th:text="${supplier.name}"></td>
+                            <td th:text="${supplier.document}"></td>
+                            <td th:text="${supplier.phone}"></td>
                             <td>
                                 <div class="d-flex gap-1 justify-content-center">
-                                    <a th:href="@{'/categories/edit/' + ${category.idCategory}}" class="btn btn-warning btn-sm" title="Editar">
+                                    <a th:href="@{'/suppliers/edit/' + ${supplier.idSupplier}}" class="btn btn-warning btn-sm" title="Editar">
                                         <i data-feather="edit"></i>
                                     </a>
-                                    <form th:action="@{'/categories/delete/' + ${category.idCategory}}" method="post" class="form-delete">
+                                    <form th:action="@{'/suppliers/delete/' + ${supplier.idSupplier}}" method="post" class="form-delete">
                                         <button type="submit" class="btn btn-danger btn-sm" title="Eliminar">
                                             <i data-feather="trash-2"></i>
                                         </button>
