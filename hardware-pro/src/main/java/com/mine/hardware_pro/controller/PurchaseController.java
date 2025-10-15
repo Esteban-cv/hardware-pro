@@ -87,7 +87,6 @@ public class PurchaseController {
                 Article article = articleRepository.findById(currentArticleId)
                         .orElseThrow(() -> new RuntimeException("Artículo no encontrado con ID: " + currentArticleId));
 
-                // ✅ AUMENTA EL STOCK DEL ARTÍCULO
                 article.setQuantity(article.getQuantity() + quantities.get(i));
                 articleRepository.save(article);
 
@@ -155,7 +154,6 @@ public class PurchaseController {
             for (PurchaseDetail detail : purchase.getDetails()) {
                 Article article = detail.getArticle();
                 if (article != null) {
-                    // ✅ RESTA EL STOCK
                     int newQuantity = article.getQuantity() - detail.getQuantity();
                     article.setQuantity(newQuantity);
                     articleRepository.save(article);
@@ -185,7 +183,7 @@ public class PurchaseController {
                 response.put("date", purchase.getDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
             }
             response.put("supplierName", purchase.getSupplier() != null ? purchase.getSupplier().getName() : "N/A");
-            response.put("employeeName", purchase.getEmployee() != null ? purchase.getEmployee().getFirstName() : "N/A");
+            response.put("employeeName", purchase.getEmployee() != null ? purchase.getEmployee().getFirstName() + ' ' + purchase.getEmployee().getLastName() : "N/A");
             response.put("subTotal", purchase.getSubTotal());
             response.put("tax", purchase.getTax());
             response.put("total", purchase.getTotal());

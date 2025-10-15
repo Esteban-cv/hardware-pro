@@ -14,11 +14,11 @@
                     <h4 class="card-title border-bottom pb-2 mb-3"><i class="fas fa-user-circle me-2"></i>Información General</h4>
                     <div class="row g-3 mb-4">
                         <div class="col-md-6"><label class="form-label">Cliente</label><input type="text" class="form-control" th:value="${sale.client.name}" readonly /></div>
-                        <div class="col-md-6"><label class="form-label">Vendedor</label><input type="text" class="form-control" th:value="${sale.employee.name}" readonly /></div>
+                        <div class="col-md-6"><label class="form-label">Vendedor</label><input type="text" class="form-control" th:value="${sale.employee.firstName + ' ' + sale.employee.lastName}" readonly /></div>
                     </div>
                     <h4 class="card-title border-bottom pb-2 mb-3"><i class="fas fa-pencil-alt me-2"></i>Campos Editables</h4>
                     <div class="row g-3 mb-4">
-                        <div class="col-md-4"><label for="date" class="form-label">Fecha de la Venta</label><input type="date" id="date" name="date" class="form-control" required th:field="*{date}" /></div>
+                        <div class="col-md-4"><label for="date" class="form-label">Fecha de la Venta</label><input type="date" id="date" name="date" class="form-control" required th:value="${#temporals.format(sale.date, 'yyyy-MM-dd')}" /></div>
                         <div class="col-md-8"><label for="observations" class="form-label">Observaciones</label><textarea id="observations" name="observations" class="form-control" rows="1" placeholder="Observaciones (opcional)" th:field="*{observations}"></textarea></div>
                     </div>
                     <h4 class="card-title border-bottom pb-2 mb-3"><i class="fas fa-boxes me-2"></i>Detalle de Productos Vendidos</h4>

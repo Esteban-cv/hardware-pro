@@ -42,7 +42,7 @@
                             <td th:text="${issue.idIssue}"></td>
                             <td th:text="${#temporals.format(issue.dateIssue, 'dd/MM/yyyy')}"></td>
                             <td th:text="${issue.article?.name}"></td>
-                            <td th:text="${issue.employee?.name}"></td>
+                            <td th:text="${issue.employee?.firstName + ' ' + issue.employee?.lastName}"></td>
                             <td>
                                 <div class="d-flex justify-content-center gap-1">
                                     <button class="btn btn-info btn-sm btn-view" th:data-id="${issue.idIssue}" data-type="issue" title="Ver Detalles">

@@ -135,7 +135,7 @@ $(document).ready(function() {
         $('#modalPurchaseTotal').text(formatCurrency(data.total));
 
         const detailsTbody = $('#modalPurchaseDetailsTbody');
-        detailsTbody.empty(); // Limpiar la tabla antes de llenarla
+        detailsTbody.empty();
 
         data.details.forEach(detail => {
             const row = `<tr>

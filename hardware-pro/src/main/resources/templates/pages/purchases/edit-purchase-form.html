@@ -30,7 +30,7 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Registrado por</label>
-                            <input type="text" class="form-control" th:value="${purchase.employee.name}" readonly />
+                            <input type="text" class="form-control" th:value="${purchase.employee.firstName + ' ' + purchase.employee.lastName}" readonly />
                         </div>
                     </div>
 

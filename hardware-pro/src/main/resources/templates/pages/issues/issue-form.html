@@ -55,7 +55,7 @@
                             <label for="employee" class="form-label">Registrado por</label>
                             <select id="employee" class="form-select" th:field="*{employee}" required>
                                 <option value="">Seleccione...</option>
-                                <option th:each="emp : ${employees}" th:value="${emp.idEmployee}" th:text="${emp.name}"></option>
+                                <option th:each="emp : ${employees}" th:value="${emp.idEmployee}" th:text="${emp.firstName + ' ' + emp.lastName}"></option>
                             </select>
                         </div>
 
