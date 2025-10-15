@@ -27,13 +27,14 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-striped table-hover" id="myTable">
-                        <thead>
+                    <table class="table table-striped table-hover table-suppliers" id="myTable">
+                        <thead class="text-center">
                         <tr>
                             <th>ID</th>
                             <th>NOMBRE</th>
                             <th>DOCUMENTO</th>
                             <th>TELÉFONO</th>
+                            <th>ESTADO</th>
                             <th>ACCIONES</th>
                         </tr>
                         </thead>
@@ -43,14 +44,22 @@
                             <td th:text="${supplier.name}"></td>
                             <td th:text="${supplier.document}"></td>
                             <td th:text="${supplier.phone}"></td>
+                            <td class="text-center">
+                                <span th:if="${supplier.active}" class="badge bg-success">Activo</span>
+                                <span th:unless="${supplier.active}" class="badge bg-danger">Inactivo</span>
+                            </td>
                             <td>
                                 <div class="d-flex gap-1 justify-content-center">
                                     <a th:href="@{'/suppliers/edit/' + ${supplier.idSupplier}}" class="btn btn-warning btn-sm" title="Editar">
                                         <i data-feather="edit"></i>
                                     </a>
-                                    <form th:action="@{'/suppliers/delete/' + ${supplier.idSupplier}}" method="post" class="form-delete">
-                                        <button type="submit" class="btn btn-danger btn-sm" title="Eliminar">
-                                            <i data-feather="trash-2"></i>
+                                    <form th:action="@{'/suppliers/toggle-active/' + ${supplier.idSupplier}}" method="post" class="form-supplier-inactivate">
+                                        <button type="submit" class="btn btn-sm"
+                                                th:classappend="${supplier.active ? 'btn-danger' : 'btn-success'}"
+                                                th:title="${supplier.active ? 'Inactivar Proveedor' : 'Reactivar Proveedor'}">
+
+                                            <i data-feather="x-circle" th:if="${supplier.active}"></i>
+                                            <i data-feather="check-circle" th:unless="${supplier.active}"></i>
                                         </button>
                                     </form>
                                 </div>

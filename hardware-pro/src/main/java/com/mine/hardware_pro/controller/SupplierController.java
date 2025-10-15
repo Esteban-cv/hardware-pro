@@ -6,6 +6,7 @@ import com.mine.hardware_pro.repository.SupplierRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -20,7 +21,7 @@ public class SupplierController {
 
     @GetMapping
     public String listSuppliers(Model model) {
-        List<Supplier> suppliers = supplierRepository.findAll(Sort.by("idSupplier").descending());
+        List<Supplier> suppliers = supplierRepository.findAll(Sort.by("active").descending());
         model.addAttribute("suppliers", suppliers);
         return "pages/suppliers/supplier";
     }
@@ -58,13 +59,25 @@ public class SupplierController {
         return "pages/suppliers/supplier-form";
     }
 
-    @PostMapping("/delete/{id}")
-    public String deleteSupplier(@PathVariable("id") Long idSupplier, RedirectAttributes ra) {
+    @PostMapping("/toggle-active/{id}")
+    @Transactional
+    public String toggleActiveStatus(@PathVariable("id") Long id, RedirectAttributes ra) {
         try {
-            supplierRepository.deleteById(idSupplier);
-            ra.addFlashAttribute("success", "Proveedor eliminada exitosamente.");
+            Supplier supplier = supplierRepository.findById(id).orElse(null);
+
+            if (supplier == null) {
+                ra.addFlashAttribute("error", "Proveedor no encontrado");
+                return "redirect:/suppliers";
+            }
+
+            supplier.setActive(!supplier.isActive());
+            supplierRepository.save(supplier);
+
+            String status = supplier.isActive() ? "reactivado" : "inactivado";
+            ra.addFlashAttribute("success", "Proveedor '" + supplier.getName() + "' ha sido " + status + ".");
+
         } catch (Exception e) {
-            ra.addFlashAttribute("error", "Hubo un error al eliminar el proveedor.");
+            ra.addFlashAttribute("error", "Error al cambiar el estado del proveedor.");
         }
         return "redirect:/suppliers";
     }
