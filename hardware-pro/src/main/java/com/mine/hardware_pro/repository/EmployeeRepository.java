@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.mine.hardware_pro.model.Employee;
 
 public interface EmployeeRepository extends JpaRepository<Employee,Long> {
+    boolean existsByDocument(String document);
 }

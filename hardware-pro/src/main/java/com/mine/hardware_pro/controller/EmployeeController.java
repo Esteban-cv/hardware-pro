@@ -44,47 +44,59 @@ public class EmployeeController {
 
     @PostMapping("/save")
     @Transactional
-    public String save(@ModelAttribute Employee employeeFromForm, RedirectAttributes ra) {
+    public String save(@ModelAttribute Employee employee, RedirectAttributes ra) {
         try {
-            boolean isNew = (employeeFromForm.getIdEmployee() == null);
+            boolean isNew = (employee.getIdEmployee() == null);
 
             if (isNew) {
-                User user = employeeFromForm.getUser();
-                user.setFirstName(employeeFromForm.getFirstName());
-                user.setLastName(employeeFromForm.getLastName());
+                User user = employee.getUser();
+
+                if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+                    ra.addFlashAttribute("error", "El email '" + user.getEmail() + "' ya está en uso.");
+                    ra.addFlashAttribute("employee", employee);
+                    return "redirect:/employees/form";
+                }
+
+                if (employee.getDocument() != null && !employee.getDocument().isBlank()) {
+                    if (employeeRepository.existsByDocument(employee.getDocument())) {
+                        ra.addFlashAttribute("error", "El documento '" + employee.getDocument() + "' ya está registrado.");
+                        ra.addFlashAttribute("employee", employee);
+                        return "redirect:/employees/form";
+                    }
+                }
+
+                user.setFirstName(employee.getFirstName());
+                user.setLastName(employee.getLastName());
                 user.setActive(true);
                 user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-                employeeRepository.save(employeeFromForm);
+                employeeRepository.save(employee);
                 ra.addFlashAttribute("success", "Empleado creado exitosamente");
 
             } else {
-                Employee employeeToUpdate = employeeRepository.findById(employeeFromForm.getIdEmployee())
+                Employee employeeToUpdate = employeeRepository.findById(employee.getIdEmployee())
                         .orElseThrow(() -> new RuntimeException("Empleado no encontrado"));
-
-                employeeToUpdate.setFirstName(employeeFromForm.getFirstName());
-                employeeToUpdate.setLastName(employeeFromForm.getLastName());
-                employeeToUpdate.setDocument(employeeFromForm.getDocument());
-                employeeToUpdate.setPhone(employeeFromForm.getPhone());
-                employeeToUpdate.setAddress(employeeFromForm.getAddress());
+                employeeToUpdate.setFirstName(employee.getFirstName());
+                employeeToUpdate.setLastName(employee.getLastName());
+                employeeToUpdate.setDocument(employee.getDocument());
+                employeeToUpdate.setPhone(employee.getPhone());
+                employeeToUpdate.setAddress(employee.getAddress());
 
                 User userToUpdate = employeeToUpdate.getUser();
-                userToUpdate.setFirstName(employeeFromForm.getFirstName());
-                userToUpdate.setLastName(employeeFromForm.getLastName());
-                userToUpdate.setEmail(employeeFromForm.getUser().getEmail());
-                userToUpdate.setRole(employeeFromForm.getUser().getRole());
+                userToUpdate.setFirstName(employee.getFirstName());
+                userToUpdate.setLastName(employee.getLastName());
+                userToUpdate.setEmail(employee.getUser().getEmail());
+                userToUpdate.setRole(employee.getUser().getRole());
 
                 employeeRepository.save(employeeToUpdate);
                 ra.addFlashAttribute("success", "Empleado actualizado exitosamente");
             }
 
         } catch (Exception e) {
+            e.printStackTrace();
             ra.addFlashAttribute("error", "Error al guardar el Empleado: " + e.getMessage());
-            if (employeeFromForm.getIdEmployee() == null) {
-                return "redirect:/employees/form";
-            } else {
-                return "redirect:/employees/edit/" + employeeFromForm.getIdEmployee();
-            }
+            String redirectUrl = (employee.getIdEmployee() == null) ? "/employees/form" : "/employees/edit/" + employee.getIdEmployee();
+            return "redirect:" + redirectUrl;
         }
 
         return "redirect:/employees";
