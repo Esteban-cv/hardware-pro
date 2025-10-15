@@ -1,10 +1,12 @@
 package com.mine.hardware_pro.controller;
 
 import com.mine.hardware_pro.model.Category;
+import com.mine.hardware_pro.repository.ArticleRepository;
 import com.mine.hardware_pro.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -15,6 +17,7 @@ import java.util.List;
 @RequestMapping("/categories")
 public class CategoryController {
     @Autowired CategoryRepository categoryRepository;
+    @Autowired ArticleRepository articleRepository;
 
     @GetMapping
     public String listCategories(Model model) {
@@ -57,12 +60,25 @@ public class CategoryController {
     }
 
     @PostMapping("/delete/{id}")
-    public String deleteCategory(@PathVariable("id") Integer idCategory, RedirectAttributes ra) {
+    @Transactional
+    public String deleteCategory(@PathVariable("id") Integer id, RedirectAttributes ra) {
         try {
-            categoryRepository.deleteById(idCategory);
-            ra.addFlashAttribute("success", "Categoría eliminada exitosamente.");
+            Category categoryToDelete = categoryRepository.findById(id).orElse(null);
+
+            if (categoryToDelete == null) {
+                ra.addFlashAttribute("error", "La categoría no fue encontrada.");
+                return "redirect:/categories";
+            }
+            boolean isCategoryInUse = articleRepository.existsByCategory(categoryToDelete);
+
+            if (isCategoryInUse) {
+                ra.addFlashAttribute("error", "No se puede eliminar la categoría '" + categoryToDelete.getName() + "' porque tiene artículos asociados.");
+            } else {
+                categoryRepository.delete(categoryToDelete);
+                ra.addFlashAttribute("success", "Categoría eliminada exitosamente.");
+            }
         } catch (Exception e) {
-            ra.addFlashAttribute("error", "Hubo un error al eliminar la categoría.");
+            ra.addFlashAttribute("error", "Ocurrió un error al intentar eliminar la categoría.");
         }
         return "redirect:/categories";
     }
