@@ -177,7 +177,7 @@ public class SaleController {
                 response.put("date", sale.getDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
             }
             response.put("clientName", sale.getClient() != null ? sale.getClient().getName() : "N/A");
-            response.put("employeeName", sale.getEmployee() != null ? sale.getEmployee().getName() : "N/A");
+            response.put("employeeName", sale.getEmployee() != null ? sale.getEmployee().getFirstName() : "N/A");
             response.put("subTotal", sale.getSubTotal());
             response.put("tax", sale.getTax());
             response.put("total", sale.getTotal());

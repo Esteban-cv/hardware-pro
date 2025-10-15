@@ -6,6 +6,7 @@ $(document).ready(function() {
     const issueDetailsModal = document.getElementById('issueDetailsModal') ? new bootstrap.Modal(document.getElementById('issueDetailsModal')) : null;
     const clientDetailsModal = document.getElementById('clientDetailsModal') ? new bootstrap.Modal(document.getElementById('clientDetailsModal')) : null;
     const inventoryDetailsModal = document.getElementById('inventoryDetailsModal') ? new bootstrap.Modal(document.getElementById('inventoryDetailsModal')) : null;
+    const employeeDetailsModal = document.getElementById('employeeDetailsModal') ? new bootstrap.Modal(document.getElementById('employeeDetailsModal')) : null;
 
     $('body').on('click', '.btn-view', function() {
         const type = $(this).data('type');
@@ -26,6 +27,8 @@ $(document).ready(function() {
             url = '/clients/view/' + id;
         } else if (type === 'inventory') {
             url = '/inventories/view/' + id;
+        } else if (type === 'employee') {
+            url = '/employees/view/' + id;
         }
 
         if (!url) return;
@@ -48,6 +51,8 @@ $(document).ready(function() {
                     populateClientModal(data);
                 } else if (type === 'inventory') {
                     populateInventoryModal(data);
+                } else if (type === 'employee') {
+                    populateEmployeeModal(data);
                 }
             },
             error: function() {
@@ -208,5 +213,31 @@ $(document).ready(function() {
         $('#modalInventoryUpdateDate').text(data.updatingDate || 'N/A');
 
         inventoryDetailsModal.show();
+    }
+
+    // ===============================================================
+    // FUNCIÓN NUEVA PARA POBLAR EL MODAL DE EMPLEADOS
+    // ===============================================================
+    function populateEmployeeModal(data) {
+        if (!employeeDetailsModal) return;
+
+        // Llenar los campos del modal
+        $('#modalEmployeeId').text(data.idEmployee);
+        $('#modalEmployeeName').text(data.firstName + ' ' + data.lastName);
+        $('#modalEmployeeDocument').text(data.document || 'N/A');
+        $('#modalEmployeeEmail').text(data.email || 'N/A');
+        $('#modalEmployeePhone').text(data.phone || 'N/A');
+        $('#modalEmployeeAddress').text(data.address || 'N/A');
+        $('#modalEmployeeRole').text(data.roleName || 'N/A');
+
+        // Lógica para mostrar el estado con un badge de color
+        const statusElement = $('#modalEmployeeStatus');
+        if (data.active) {
+            statusElement.html('<span class="badge bg-success">Activo</span>');
+        } else {
+            statusElement.html('<span class="badge bg-danger">Inactivo</span>');
+        }
+
+        employeeDetailsModal.show();
     }
 });

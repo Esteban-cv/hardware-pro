@@ -87,6 +87,32 @@ document.addEventListener('DOMContentLoaded', function() {
     // PARTE 3: CONFIRMACIÓN DE BORRADO
     // ===============================================================
     const deleteForms = document.querySelectorAll('.form-delete');
+    const actionForms = document.querySelectorAll('.form-employee-inactivate');
+
+    actionForms.forEach(form => {
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Obtenemos el texto del título del botón (ej. "Inactivar Empleado")
+            const buttonTitle = event.submitter.getAttribute('title');
+            const actionText = buttonTitle || 'ejecutar esta acción'; // Texto por defecto
+
+            Swal.fire({
+                title: `¿Estás seguro de que quieres ${actionText.toLowerCase()}?`,
+                text: "Esta acción cambiará el estado del empleado.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, ¡continuar!',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.submit();
+                }
+            });
+        });
+    });
 
     deleteForms.forEach(form => {
         form.addEventListener('submit', function(event) {

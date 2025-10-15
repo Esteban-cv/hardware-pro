@@ -41,6 +41,12 @@ public class User implements UserDetails {
     @JoinColumn(name = "role_id_role")
     private Role role;
 
+    @Column(nullable = false)
+    private boolean active = true;
+
+    @OneToOne(mappedBy = "user")
+    private Employee employee;
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -48,6 +54,12 @@ public class User implements UserDetails {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    // Método para saber si un usuario esta activo
+    @Override
+    public boolean isEnabled() {
+        return this.active;
+    }
 
     // Métodos de la interfaz UserDetails
     @Override

@@ -185,7 +185,7 @@ public class PurchaseController {
                 response.put("date", purchase.getDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
             }
             response.put("supplierName", purchase.getSupplier() != null ? purchase.getSupplier().getName() : "N/A");
-            response.put("employeeName", purchase.getEmployee() != null ? purchase.getEmployee().getName() : "N/A");
+            response.put("employeeName", purchase.getEmployee() != null ? purchase.getEmployee().getFirstName() : "N/A");
             response.put("subTotal", purchase.getSubTotal());
             response.put("tax", purchase.getTax());
             response.put("total", purchase.getTotal());

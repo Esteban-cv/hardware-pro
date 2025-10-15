@@ -96,7 +96,7 @@ public class IssueController {
             response.put("quantity", issue.getQuantity());
             response.put("observations", issue.getObservations());
             response.put("articleName", issue.getArticle() != null ? issue.getArticle().getName() : "N/A");
-            response.put("employeeName", issue.getEmployee() != null ? issue.getEmployee().getName() : "N/A");
+            response.put("employeeName", issue.getEmployee() != null ? issue.getEmployee().getFirstName() : "N/A");
             response.put("clientName", issue.getClient() != null ? issue.getClient().getName() : "N/A");
             return ResponseEntity.ok(response);
         } catch (Exception e) {
