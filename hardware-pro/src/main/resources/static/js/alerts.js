@@ -89,6 +89,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const deleteForms = document.querySelectorAll('.form-delete');
     const actionForms = document.querySelectorAll('.form-employee-inactivate');
     const inactivateSupplierForm = document.querySelectorAll('.form-supplier-inactivate');
+    const inactivateClientForm = document.querySelectorAll('.form-client-inactivate');
 
     actionForms.forEach(form => {
         form.addEventListener('submit', function(event) {
@@ -125,6 +126,30 @@ document.addEventListener('DOMContentLoaded', function() {
             Swal.fire({
                 title: `¿Estás seguro de que quieres ${actionText.toLowerCase()}?`,
                 text: "Esta acción cambiará el estado del proveedor.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, ¡continuar!',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.submit();
+                }
+            });
+        });
+    });
+
+    inactivateClientForm.forEach(form => {
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const buttonTitle = event.submitter.getAttribute('title');
+            const actionText = buttonTitle || 'ejecutar esta acción';
+
+            Swal.fire({
+                title: `¿Estás seguro de que quieres ${actionText.toLowerCase()}?`,
+                text: "Esta acción cambiará el estado del cliente.",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',

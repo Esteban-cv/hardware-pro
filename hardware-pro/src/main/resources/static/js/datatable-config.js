@@ -18,6 +18,8 @@ $(document).ready(function() {
         dataTableOptions.order = [[ 4, 'asc' ]];
     } else if(table.hasClass('table-employees')) {
         dataTableOptions.order = [[ 4, 'asc' ]];
+    } else if(table.hasClass('table-clients')) {
+        dataTableOptions.order = [[ 4, 'asc' ]];
     }
     table.DataTable(dataTableOptions);
 });
