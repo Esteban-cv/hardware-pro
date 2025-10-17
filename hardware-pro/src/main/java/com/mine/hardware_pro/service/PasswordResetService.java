@@ -35,7 +35,6 @@ public class PasswordResetService {
         if (userOptional.isPresent()) {
             User user = userOptional.get();
 
-            // La lógica para crear y guardar el token no cambia.
             Optional<PasswordResetToken> existingToken = tokenRepository.findByUser(user);
             PasswordResetToken token;
             if (existingToken.isPresent()) {

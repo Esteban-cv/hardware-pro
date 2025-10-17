@@ -1,12 +1,14 @@
 package com.mine.hardware_pro.controller;
 
 import com.mine.hardware_pro.model.Article;
+import com.mine.hardware_pro.model.Purchase;
 import com.mine.hardware_pro.model.Sale;
 import com.mine.hardware_pro.model.SaleDetail;
 import com.mine.hardware_pro.repository.*;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,9 +37,15 @@ public class SaleController {
     @Autowired private SaleDetailRepository saleDetailRepository;
 
     @GetMapping
-    public String listSales(Model model) {
-        List<Sale> sales = saleRepository.findAll(Sort.by("date").descending());
+    public String listSales(Model model, @RequestParam(name = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+                            @RequestParam(name = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        Sort sort = Sort.by("date").descending();
+        List<Sale> sales = (startDate != null && endDate != null) ?
+                saleRepository.findByDateBetween(startDate, endDate, sort) :
+                saleRepository.findAll(sort);
         model.addAttribute("sales", sales);
+        model.addAttribute("startDate", startDate);
+        model.addAttribute("endDate", endDate);
         return "pages/sales/sale";
     }
 
@@ -61,7 +69,6 @@ public class SaleController {
             if (sale.getDate() == null) {
                 sale.setDate(LocalDate.now());
             }
-            // Validar stock antes de cualquier operación
             for (int i = 0; i < articleIds.size(); i++) {
                 Article article = articleRepository.findById(articleIds.get(i)).orElseThrow();
                 if (article.getQuantity() < quantities.get(i)) {
@@ -87,7 +94,6 @@ public class SaleController {
             for (int i = 0; i < articleIds.size(); i++) {
                 Article article = articleRepository.findById(articleIds.get(i)).orElseThrow();
 
-                // ✅ RESTA EL STOCK DEL ARTÍCULO
                 article.setQuantity(article.getQuantity() - quantities.get(i));
                 articleRepository.save(article);
 
@@ -149,7 +155,6 @@ public class SaleController {
             }
             for (SaleDetail detail : sale.getDetails()) {
                 Article article = detail.getArticle();
-                // ✅ RESTAURA EL STOCK
                 article.setQuantity(article.getQuantity() + detail.getQuantity());
                 articleRepository.save(article);
             }
@@ -177,7 +182,7 @@ public class SaleController {
                 response.put("date", sale.getDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
             }
             response.put("clientName", sale.getClient() != null ? sale.getClient().getName() : "N/A");
-            response.put("employeeName", sale.getEmployee() != null ? sale.getEmployee().getFirstName() : "N/A");
+            response.put("employeeName", sale.getEmployee() != null ? sale.getEmployee().getFirstName() + ' ' + sale.getEmployee().getLastName() : "N/A");
             response.put("subTotal", sale.getSubTotal());
             response.put("tax", sale.getTax());
             response.put("total", sale.getTotal());
@@ -198,7 +203,4 @@ public class SaleController {
             return ResponseEntity.internalServerError().build();
         }
     }
-
-    // Los métodos privados 'calculateSubTotal' y 'processSaleDetails' ya no son necesarios
-    // porque su lógica se integró en el método save().
 }

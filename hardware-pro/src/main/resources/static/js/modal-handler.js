@@ -74,8 +74,7 @@ $(document).ready(function() {
         $('#modalEmployeeName').text(data.employeeName);
         $('#modalDate').text(data.date);
 
-        const observations = data.observations || 'N/A';
-        $('#modalObservations').text(observations);
+        $('#modalObservation').text(data.observations || 'N/A');
 
         $('#modalSubTotal').text(formatCurrency(data.subTotal));
         $('#modalTax').text(formatCurrency(data.tax));

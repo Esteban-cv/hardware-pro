@@ -13,6 +13,33 @@
     <section class="section">
         <div class="card">
             <div class="card-header">
+                <h4 class="card-title"><i data-feather="filter" class="me-2"></i>Filtrar Ventas por Fecha</h4>
+            </div>
+            <div class="card-body">
+                <form th:action="@{/sales}" method="get" class="row g-3 align-items-end">
+                    <div class="col-md-5">
+                        <label for="startDate" class="form-label">Desde:</label>
+                        <input type="date" class="form-control" id="startDate" name="startDate" th:value="${startDate}">
+                    </div>
+                    <div class="col-md-5">
+                        <label for="endDate" class="form-label">Hasta:</label>
+                        <input type="date" class="form-control" id="endDate" name="endDate" th:value="${endDate}">
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary w-100">Filtrar</button>
+                    </div>
+                    <div class="col-md-2">
+                        <a th:href="@{/purchases}" class="btn btn-secondary w-100">Limpiar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="section">
+        <div class="card">
+            <div class="card-header">
                 <div class="d-flex flex-wrap gap-2">
                     <a th:href="@{/sales/form}" class="btn btn-primary">
                         <i data-feather="plus-circle"></i> Nueva Venta
