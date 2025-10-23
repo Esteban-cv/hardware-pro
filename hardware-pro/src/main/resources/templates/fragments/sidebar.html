@@ -8,10 +8,14 @@
 </head>
 
 <body>
-    <div id="sidebar" class='active' th:fragment="sidebar"><!--sidebar-->
-        <div class="sidebar-wrapper active">
+    <div id="sidebar" th:classappend="${globalSidebarCollapsed == 'true' ? '' : 'active'}" th:fragment="sidebar"><!--sidebar-->
+        <div class="sidebar-wrapper" th:classappend="${globalSidebarCollapsed == 'true' ? '' : 'active'}">
             <div class="sidebar-header">
-                <img th:src="@{/img/logo-rezisable.png}" alt="" srcset="" style=" height: 70px; width: 200px;">
+                <a th:href="@{/dashboard}" class="d-flex align-items-center">
+                    <img th:src="@{${globalCompanyLogo}}"
+                         alt="Logo"
+                         style="height: 40px; width: auto;"> <span class="ms-2 fs-5 fw-bold"></span>
+                </a>
             </div>
             <div class="sidebar-menu">
                 <ul class="menu">

@@ -23,9 +23,9 @@
                     <div class="card-body">
                         <!-- Header -->
                         <div class="text-center mb-5">
-                            <img th:src="@{/img/logo-login-.png}" style="height: 100px; width: 100px" class="mb-4">
+                            <img th:src="@{${companyLogoUrl}}" style="height: 100px; width: 200px" class="mb-4">
                             <h3>Inicia Sesión</h3>
-                            <p>Porfavor inicia sesión para ingresar a Tuerca Dorada</p>
+                            <p>Porfavor inicia sesión para ingresar a <strong th:text="${companyName}">Tuerca Dorada</strong></p>
                         </div>
 
                         <!-- Form -->

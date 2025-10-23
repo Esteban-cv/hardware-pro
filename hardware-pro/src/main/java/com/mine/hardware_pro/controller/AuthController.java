@@ -5,6 +5,7 @@ import com.mine.hardware_pro.auth.PasswordResetRequest;
 import com.mine.hardware_pro.auth.RegisterRequest;
 import com.mine.hardware_pro.service.AuthenticationService;
 import com.mine.hardware_pro.service.PasswordResetService;
+import com.mine.hardware_pro.service.SettingService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,13 +15,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class AuthController {
-
     private final AuthenticationService authService;
     private final PasswordResetService passwordResetService;
+    private final SettingService settingService;
 
-    public AuthController(AuthenticationService authService, PasswordResetService passwordResetService) {
+    public AuthController(AuthenticationService authService,
+                          PasswordResetService passwordResetService,
+                          SettingService settingService) {
         this.authService = authService;
         this.passwordResetService = passwordResetService;
+        this.settingService = settingService;
     }
 
     @GetMapping("/")
@@ -29,7 +33,19 @@ public class AuthController {
     }
 
     @GetMapping("/login")
-    public String showLoginForm() {
+    public String showLoginForm(Model model) {
+        String companyName = settingService.getSettingValue("COMPANY_NAME");
+        String companyLogoPath = settingService.getSettingValue("COMPANY_LOGO");
+
+        model.addAttribute("companyName", companyName != null ? companyName : "Tuerca Dorada");
+
+        if (companyLogoPath != null && !companyLogoPath.isBlank()) {
+            model.addAttribute("companyLogoUrl", "/uploads/" + companyLogoPath);
+        } else {
+            // Asegúrate de que esta ruta a tu logo "TD" por defecto sea correcta
+            model.addAttribute("companyLogoUrl", "/img/logo-login-.png");
+        }
+
         return "auth/auth-login";
     }
 

@@ -49,23 +49,17 @@ public class SettingsController {
      * Recibe los parámetros del formulario y el archivo del logo.
      */
     @PostMapping("/save")
-    public String saveSettings(
-
-            @RequestParam("companyName") String companyName,
-            @RequestParam("companyRut") String companyRut,
-            @RequestParam("companyPhone") String companyPhone,
-            @RequestParam("companyEmail") String companyEmail,
-            @RequestParam("companyAddress") String companyAddress,
-            @RequestParam(value = "companyLogoFile", required = false) MultipartFile companyLogoFile,
-
-            @RequestParam("vatRate") BigDecimal vatRate,
-            @RequestParam("currencySymbol") String currencySymbol,
-            @RequestParam("minStockAlert") String minStockAlert,
-
-            @RequestParam("themeMode") String themeMode,
-            @RequestParam(value = "sidebarCollapsed", required = false) String sidebarCollapsed,
-
-            RedirectAttributes ra) {
+    public String saveSettings(@RequestParam("companyName") String companyName,
+                               @RequestParam("companyRut") String companyRut,
+                               @RequestParam("companyPhone") String companyPhone,
+                               @RequestParam("companyEmail") String companyEmail,
+                               @RequestParam("companyAddress") String companyAddress,
+                               @RequestParam(value = "companyLogoFile", required = false) MultipartFile companyLogoFile,
+                               @RequestParam("vatRate") BigDecimal vatRate,
+                               @RequestParam("currencySymbol") String currencySymbol,
+                               @RequestParam("minStockAlert") String minStockAlert,
+                               @RequestParam(value = "sidebarCollapsed", required = false) String sidebarCollapsed,
+                               RedirectAttributes ra) {
 
         try {
             settingService.saveSetting("COMPANY_NAME", companyName);
@@ -83,7 +77,6 @@ public class SettingsController {
             settingService.saveSetting("CURRENCY_SYMBOL", currencySymbol);
             settingService.saveSetting("MIN_STOCK_ALERT", minStockAlert);
 
-            settingService.saveSetting("THEME_MODE", themeMode);
             settingService.saveSetting("SIDEBAR_COLLAPSED", "on".equals(sidebarCollapsed) ? "true" : "false");
 
 
