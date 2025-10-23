@@ -68,7 +68,7 @@
                     <div class="dropdown-menu dropdown-menu-end">
                         <a class="dropdown-item" th:href="@{/profile}"><i data-feather="user"></i> Perfil</a>
                         <a class="dropdown-item" href="#"><i data-feather="mail"></i> Mensajes</a>
-                        <a class="dropdown-item" href="#"><i data-feather="settings"></i> Ajustes</a>
+                        <a class="dropdown-item" th:href="@{/settings}"><i data-feather="settings"></i> Ajustes</a>
                         <div class="dropdown-divider"></div>
                         <form th:action="@{/logout}" method="post" class="m-0">
                             <button class="dropdown-item d-flex align-items-center text-danger" type="submit">

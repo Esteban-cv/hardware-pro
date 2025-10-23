@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<body>
+<div layout:fragment="content">
+
+    <div class="page-title">
+        <h3><i class="fas fa-cogs me-2"></i>Ajustes Generales</h3>
+        <p class="text-subtitle text-muted">Configura los parámetros principales de la aplicación.</p>
+    </div>
+
+    <section class="section">
+        <form th:action="@{/settings/save}" method="post" enctype="multipart/form-data">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Datos de la Empresa</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="companyName" class="form-label">Nombre de la Empresa</label>
+                            <input type="text" class="form-control" id="companyName" name="companyName" th:value="${companyName}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="companyRut" class="form-label">RUT / NIT</label>
+                            <input type="text" class="form-control" id="companyRut" name="companyRut" th:value="${companyRut}">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="companyPhone" class="form-label">Teléfono</label>
+                            <input type="text" class="form-control" id="companyPhone" name="companyPhone" th:value="${companyPhone}">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="companyEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="companyEmail" name="companyEmail" th:value="${companyEmail}">
+                        </div>
+                        <div class="col-12">
+                            <label for="companyAddress" class="form-label">Dirección</label>
+                            <input type="text" class="form-control" id="companyAddress" name="companyAddress" th:value="${companyAddress}">
+                        </div>
+                        <div class="col-12">
+                            <label for="companyLogoFile" class="form-label">Logo de la Empresa</label>
+                            <input type="file" class="form-control" id="companyLogoFile" name="companyLogoFile" accept="image/*">
+                            <small class="form-text text-muted">Sube un nuevo logo para reemplazar el actual. Formatos: PNG, JPG, SVG.</small>
+
+                            <div th:if="${companyLogo}" class="mt-3">
+                                <label class="form-label d-block">Logo Actual:</label>
+                                <img th:src="@{'/uploads/' + ${companyLogo}}" alt="Logo Actual" style="max-height: 80px; border: 1px solid #ddd; padding: 5px; background: #f9f9f9;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Configuración de Operación</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="vatRate" class="form-label">Tasa de IVA (%)</label>
+                            <input type="number" step="0.01" class="form-control" id="vatRate" name="vatRate" th:value="${vatRate}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="currencySymbol" class="form-label">Símbolo de Moneda</label>
+                            <input type="text" class="form-control" id="currencySymbol" name="currencySymbol" th:value="${currencySymbol}" placeholder="$">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="minStockAlert" class="form-label">Alerta de Stock Mínimo (unidades)</label>
+                            <input type="number" class="form-control" id="minStockAlert" name="minStockAlert" th:value="${minStockAlert}" placeholder="10">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Apariencia</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="themeMode" class="form-label">Tema</label>
+                            <select id="themeMode" name="themeMode" class="form-select">
+                                <option value="light" th:selected="${themeMode == 'light'}">Claro</option>
+                                <option value="dark" th:selected="${themeMode == 'dark'}">Oscuro</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 d-flex align-items-end">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="sidebarCollapsed" name="sidebarCollapsed"
+                                       th:checked="${sidebarCollapsed == 'true'}">
+                                <label class="form-check-label" for="sidebarCollapsed">Menú lateral colapsado por defecto</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary btn-lg">
+                    <i class="fas fa-save me-1"></i>
+                    Guardar Ajustes
+                </button>
+            </div>
+
+        </form>
+    </section>
+
+</div>
+</body>
+</html>
