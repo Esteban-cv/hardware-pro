@@ -76,6 +76,8 @@ $(document).ready(function() {
 
         $('#modalObservation').text(data.observations || 'N/A');
 
+        $('#modalVatPercentage').text(data.vatRate);
+
         $('#modalSubTotal').text(formatCurrency(data.subTotal));
         $('#modalTax').text(formatCurrency(data.tax));
         $('#modalTotal').text(formatCurrency(data.total));
@@ -128,6 +130,8 @@ $(document).ready(function() {
         $('#modalPurchaseDate').text(data.date);
         $('#modalPurchaseSupplier').text(data.supplierName);
         $('#modalPurchaseEmployee').text(data.employeeName);
+
+        $('#modalVatPercentage').text(data.vatRate);
 
         $('#modalPurchaseSubtotal').text(formatCurrency(data.subTotal));
         $('#modalPurchaseTax').text(formatCurrency(data.tax));

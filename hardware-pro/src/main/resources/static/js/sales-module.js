@@ -139,7 +139,11 @@ function updateSaleCartDisplay() {
 function updateSaleTotals() {
     let subtotal = 0;
     saleCart.forEach(item => { subtotal += item.price * item.quantity; });
-    const tax = subtotal * 0.19;
+
+    const vatRateString = $('#saleForm').data('vat-rate') || "19";
+    const vatRate = parseFloat(vatRateString) / 100;
+
+    const tax = subtotal * vatRate;
     const total = subtotal + tax;
     document.getElementById('saleSubtotal').textContent = formatCurrency(subtotal);
     document.getElementById('saleTax').textContent = formatCurrency(tax);

@@ -4,6 +4,7 @@ import com.mine.hardware_pro.model.Article;
 import com.mine.hardware_pro.model.Purchase;
 import com.mine.hardware_pro.model.PurchaseDetail;
 import com.mine.hardware_pro.repository.*;
+import com.mine.hardware_pro.service.SettingService;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -33,6 +34,7 @@ public class PurchaseController {
     @Autowired private ArticleRepository articleRepository;
     @Autowired private SupplierRepository supplierRepository;
     @Autowired private EmployeeRepository employeeRepository;
+    @Autowired private SettingService settingService;
 
     @GetMapping
     public String listPurchases(Model model, @RequestParam(name = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
@@ -53,6 +55,7 @@ public class PurchaseController {
         model.addAttribute("allArticles", articleRepository.findAll());
         model.addAttribute("allSuppliers", supplierRepository.findAll());
         model.addAttribute("allEmployees", employeeRepository.findAll());
+        model.addAttribute("vatRate", settingService.getVatRate());
         return "pages/purchases/purchase-form";
     }
 
@@ -118,6 +121,7 @@ public class PurchaseController {
         }
         Hibernate.initialize(purchase.getDetails());
         model.addAttribute("purchase", purchase);
+        model.addAttribute("vatRate", settingService.getVatRate());
         return "pages/purchases/edit-purchase-form";
     }
 
@@ -187,6 +191,7 @@ public class PurchaseController {
             response.put("subTotal", purchase.getSubTotal());
             response.put("tax", purchase.getTax());
             response.put("total", purchase.getTotal());
+            response.put("vatRate", settingService.getVatRate().toPlainString());
 
             List<Map<String, Object>> detailsList = purchase.getDetails().stream().map(detail -> {
                 Map<String, Object> detailMap = new HashMap<>();

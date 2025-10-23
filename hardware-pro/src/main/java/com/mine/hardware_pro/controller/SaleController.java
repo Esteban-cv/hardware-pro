@@ -5,6 +5,7 @@ import com.mine.hardware_pro.model.Purchase;
 import com.mine.hardware_pro.model.Sale;
 import com.mine.hardware_pro.model.SaleDetail;
 import com.mine.hardware_pro.repository.*;
+import com.mine.hardware_pro.service.SettingService;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -34,7 +35,7 @@ public class SaleController {
     @Autowired private ArticleRepository articleRepository;
     @Autowired private ClientRepository clientRepository;
     @Autowired private EmployeeRepository employeeRepository;
-    @Autowired private SaleDetailRepository saleDetailRepository;
+    @Autowired private SettingService settingService;
 
     @GetMapping
     public String listSales(Model model, @RequestParam(name = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
@@ -55,6 +56,7 @@ public class SaleController {
         model.addAttribute("clients", clientRepository.findAll());
         model.addAttribute("employees", employeeRepository.findAll());
         model.addAttribute("articles", articleRepository.findAll());
+        model.addAttribute("vatRate", settingService.getVatRate());
         return "pages/sales/sale-form";
     }
 
@@ -122,6 +124,7 @@ public class SaleController {
         }
         Hibernate.initialize(sale.getDetails());
         model.addAttribute("sale", sale);
+        model.addAttribute("vatRate", settingService.getVatRate());
         return "pages/sales/edit-sale-form";
     }
 
@@ -187,6 +190,7 @@ public class SaleController {
             response.put("tax", sale.getTax());
             response.put("total", sale.getTotal());
             response.put("observations", sale.getObservations());
+            response.put("vatRate", settingService.getVatRate().toPlainString());
 
             List<Map<String, Object>> detailsList = sale.getDetails().stream().map(detail -> {
                 Map<String, Object> detailMap = new HashMap<>();
