@@ -14,27 +14,22 @@ public class GlobalViewDataAdvice {
 
     @ModelAttribute
     public void addGlobalAttributes(Model model) {
-        model.addAttribute("globalCompanyName", settingService.getSettingValue("COMPANY_NAME"));
-        model.addAttribute("globalCompanyLogo", settingService.getSettingValue("COMPANY_LOGO"));
-        model.addAttribute("globalSidebarCollapsed", settingService.getSettingValue("SIDEBAR_COLLAPSED"));
-
+        String companyName = settingService.getSettingValue("COMPANY_NAME");
         String logoPath = settingService.getSettingValue("COMPANY_LOGO");
+        String sidebarCollapsed = settingService.getSettingValue("SIDEBAR_COLLAPSED");
+        String currencySymbol = settingService.getSettingValue("CURRENCY_SYMBOL");
+
+
+        model.addAttribute("globalCompanyName", (companyName != null && !companyName.isBlank()) ? companyName : "Tuerca Dorada");
 
         if (logoPath != null && !logoPath.isBlank()) {
-            model.addAttribute("globalCompanyLogo", "/uploads/" + logoPath); // <-- Construye la ruta aquí
+            model.addAttribute("globalCompanyLogo", "/uploads/" + logoPath);
         } else {
-            model.addAttribute("globalCompanyLogo", "/img/logo-rezisable.png"); // Tu logo por defecto del sidebar
+            model.addAttribute("globalCompanyLogo", "/img/logo-rezisable.png");
         }
 
-        // Establecer valores por defecto si no están en la BD
-        if (model.getAttribute("globalCompanyName") == null) {
-            model.addAttribute("globalCompanyName", "Tu Aplicación");
-        }
-        if (model.getAttribute("globalCompanyLogo") == null) {
-            model.addAttribute("globalCompanyLogo", "assets/images/logo/logo.svg"); // Ruta de tu logo por defecto
-        }
-        if (model.getAttribute("globalSidebarCollapsed") == null) {
-            model.addAttribute("globalSidebarCollapsed", "false"); // Sidebar expandido por defecto
-        }
+        model.addAttribute("globalSidebarCollapsed", (sidebarCollapsed != null) ? sidebarCollapsed : "false");
+
+        model.addAttribute("globalCurrencySymbol", (currencySymbol != null && !currencySymbol.isBlank()) ? currencySymbol : "$");
     }
 }

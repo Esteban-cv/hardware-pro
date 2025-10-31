@@ -167,7 +167,14 @@ function updateProcessButtonState() {
 // ===============================================================
 
 function formatCurrency(amount) {
-    return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(amount);
+    if (amount === null || typeof amount === 'undefined') {
+        return currencySymbol + "0.00";
+    }
+    const formattedAmount = parseFloat(amount).toLocaleString('es-CO', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
+    return currencySymbol + formattedAmount;
 }
 
 function escapeHtml(text) {

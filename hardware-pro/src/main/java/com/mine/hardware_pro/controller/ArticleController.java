@@ -4,6 +4,7 @@ import com.mine.hardware_pro.model.Article;
 import com.mine.hardware_pro.model.Sale;
 import com.mine.hardware_pro.model.SaleDetail;
 import com.mine.hardware_pro.repository.*;
+import com.mine.hardware_pro.service.SettingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
@@ -21,19 +22,17 @@ import java.util.stream.Collectors;
 @Controller
 @RequestMapping("/articles")
 public class ArticleController {
-    @Autowired
-    private UnitRepository unitRepository;
-    @Autowired
-    private CategoryRepository  categoryRepository;
-    @Autowired
-    private ArticleRepository articleRepository;
-    @Autowired
-    private SupplierRepository supplierRepository;
+    @Autowired private UnitRepository unitRepository;
+    @Autowired private CategoryRepository  categoryRepository;
+    @Autowired private ArticleRepository articleRepository;
+    @Autowired private SupplierRepository supplierRepository;
+    @Autowired private SettingService settingService;
 
     @GetMapping
     public String listArticles(Model model){
         List<Article>  articles = articleRepository.findAll(Sort.by("idArticle").ascending());
         model.addAttribute("articles", articles);
+        model.addAttribute("currencySymbol", settingService.getSettingValue("CURRENCY_SYMBOL"));
         return "pages/articles/article";
     }
 
@@ -43,6 +42,7 @@ public class ArticleController {
         model.addAttribute("categories", categoryRepository.findAll());
         model.addAttribute("units", unitRepository.findAll());
         model.addAttribute("suppliers", supplierRepository.findAll());
+        model.addAttribute("currencySymbol", settingService.getSettingValue("CURRENCY_SYMBOL"));
         return "pages/articles/article-form";
     }
 
@@ -73,6 +73,7 @@ public class ArticleController {
         model.addAttribute("categories", categoryRepository.findAll());
         model.addAttribute("units", unitRepository.findAll());
         model.addAttribute("suppliers", supplierRepository.findAll());
+        model.addAttribute("currencySymbol", settingService.getSettingValue("CURRENCY_SYMBOL"));
         return "pages/articles/article-form";
     }
 

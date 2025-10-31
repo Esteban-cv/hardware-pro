@@ -46,6 +46,7 @@ public class PurchaseController {
         model.addAttribute("purchases", purchases);
         model.addAttribute("startDate", startDate);
         model.addAttribute("endDate", endDate);
+        model.addAttribute("currencySymbol", settingService.getSettingValue("CURRENCY_SYMBOL"));
         return "pages/purchases/purchase";
     }
 
@@ -122,6 +123,7 @@ public class PurchaseController {
         Hibernate.initialize(purchase.getDetails());
         model.addAttribute("purchase", purchase);
         model.addAttribute("vatRate", settingService.getVatRate());
+        model.addAttribute("currencySymbol", settingService.getSettingValue("CURRENCY_SYMBOL"));
         return "pages/purchases/edit-purchase-form";
     }
 

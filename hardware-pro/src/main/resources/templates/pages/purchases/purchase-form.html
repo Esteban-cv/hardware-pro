@@ -91,9 +91,9 @@
                             </div>
 
                             <ul class="list-group list-group-flush my-3">
-                                <li class="list-group-item d-flex justify-content-between"><span>Subtotal:</span> <span id="purchaseSubtotal">$0.00</span></li>
-                                <li class="list-group-item d-flex justify-content-between"><span>IVA (<span th:text="${#numbers.formatDecimal(vatRate, 1, 'COMMA', 0, 'POINT')}">19</span>%):</span></span> <span id="purchaseTax">$0.00</span></li>
-                                <li class="list-group-item d-flex justify-content-between fs-5 fw-bold"><span class="text-success">Total Compra:</span> <span id="purchaseTotal" class="text-success">$0.00</span></li>
+                                <li class="list-group-item d-flex justify-content-between"><span>Subtotal:</span> <span id="purchaseSubtotal">0.00</span></li>
+                                <li class="list-group-item d-flex justify-content-between"><span>IVA (<span th:text="${#numbers.formatDecimal(vatRate, 1, 'COMMA', 0, 'POINT')}">19</span>%):</span></span> <span id="purchaseTax">0.00</span></li>
+                                <li class="list-group-item d-flex justify-content-between fs-5 fw-bold"><span class="text-success">Total Compra:</span> <span id="purchaseTotal" class="text-success">0.00</span></li>
                             </ul>
 
                             <div class="d-grid gap-2 mt-auto">

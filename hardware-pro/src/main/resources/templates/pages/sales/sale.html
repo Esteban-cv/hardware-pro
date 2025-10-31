@@ -69,8 +69,8 @@
                         <tr th:each="sale : ${sales}">
                             <td th:text="${sale.idSale}"></td>
                             <td th:text="${#temporals.format(sale.date, 'dd/MM/yyyy')}"></td>
-                            <td th:text="'$' + ${#numbers.formatDecimal(sale.tax, 1, 'COMMA', 2, 'POINT')}"></td>
-                            <td th:text="'$' + ${#numbers.formatDecimal(sale.total, 1, 'COMMA', 2, 'POINT')}"></td>
+                            <td th:text="${currencySymbol} + ${#numbers.formatDecimal(sale.tax, 1, 'COMMA', 2, 'POINT')}"></td>
+                            <td th:text="${currencySymbol} + ${#numbers.formatDecimal(sale.total, 1, 'COMMA', 2, 'POINT')}"></td>
                             <td th:text="${sale.employee != null ? sale.employee.firstName +' '+ sale.employee.lastName : 'N/A'}"></td>
                             <td>
                                 <div class="d-flex gap-1 justify-content-center">

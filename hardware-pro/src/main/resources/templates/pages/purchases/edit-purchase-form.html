@@ -63,15 +63,15 @@
                             </tr>
                             <tr class="table-light">
                                 <td colspan="3" class="text-end fw-bold">Subtotal:</td>
-                                <td class="text-end fw-bold" th:text="'$' + ${#numbers.formatDecimal(purchase.subTotal, 1, 'COMMA', 2, 'POINT')}"></td>
+                                <td class="text-end fw-bold" th:text="${currencySymbol} + ${#numbers.formatDecimal(purchase.subTotal, 1, 'COMMA', 2, 'POINT')}"></td>
                             </tr>
                             <tr class="table-light">
                                 <td colspan="3" class="text-end fw-bold">IVA (<span th:text="${#numbers.formatDecimal(vatRate, 1, 'COMMA', 0, 'POINT')}">19</span>%):</td>
-                                <td class="text-end fw-bold" th:text="'$' + ${#numbers.formatDecimal(purchase.tax, 1, 'COMMA', 2, 'POINT')}"></td>
+                                <td class="text-end fw-bold" th:text="${currencySymbol} + ${#numbers.formatDecimal(purchase.tax, 1, 'COMMA', 2, 'POINT')}"></td>
                             </tr>
                             <tr class="table-primary">
                                 <td colspan="3" class="text-end fw-bold fs-5">Total General:</td>
-                                <td class="text-end fw-bold fs-5" th:text="'$' + ${#numbers.formatDecimal(purchase.total, 1, 'COMMA', 2, 'POINT')}"></td>
+                                <td class="text-end fw-bold fs-5" th:text="${currencySymbol} + ${#numbers.formatDecimal(purchase.total, 1, 'COMMA', 2, 'POINT')}"></td>
                             </tr>
                             </tbody>
                         </table>

@@ -27,9 +27,9 @@
                             <thead class="table-light"><tr><th>Producto</th><th class="text-end">Cantidad</th><th class="text-end">Precio Unit.</th><th class="text-end">Total</th></tr></thead>
                             <tbody>
                             <tr th:each="detail : ${sale.details}"><td th:text="${detail.article.name}"></td><td class="text-end" th:text="${detail.quantity}"></td><td class="text-end" th:text="'$' + ${#numbers.formatDecimal(detail.unitPrice, 1, 'COMMA', 2, 'POINT')}"></td><td class="text-end" th:text="'$' + ${#numbers.formatDecimal(detail.total, 1, 'COMMA', 2, 'POINT')}"></td></tr>
-                            <tr class="table-light"><td colspan="3" class="text-end fw-bold">Subtotal:</td><td class="text-end fw-bold" th:text="'$' + ${#numbers.formatDecimal(sale.subTotal, 1, 'COMMA', 2, 'POINT')}"></td></tr>
-                            <tr class="table-light"><td colspan="3" class="text-end fw-bold">IVA (<span th:text="${#numbers.formatDecimal(vatRate, 1, 'COMMA', 0, 'POINT')}">19</span>%):</td><td class="text-end fw-bold" th:text="'$' + ${#numbers.formatDecimal(sale.tax, 1, 'COMMA', 2, 'POINT')}"></td></tr>
-                            <tr class="table-primary"><td colspan="3" class="text-end fw-bold fs-5">Total General:</td><td class="text-end fw-bold fs-5" th:text="'$' + ${#numbers.formatDecimal(sale.total, 1, 'COMMA', 2, 'POINT')}"></td></tr>
+                            <tr class="table-light"><td colspan="3" class="text-end fw-bold">Subtotal:</td><td class="text-end fw-bold" th:text="${currencySymbol} + ${#numbers.formatDecimal(sale.subTotal, 1, 'COMMA', 2, 'POINT')}"></td></tr>
+                            <tr class="table-light"><td colspan="3" class="text-end fw-bold">IVA (<span th:text="${#numbers.formatDecimal(vatRate, 1, 'COMMA', 0, 'POINT')}">19</span>%):</td><td class="text-end fw-bold" th:text="${currencySymbol} + ${#numbers.formatDecimal(sale.tax, 1, 'COMMA', 2, 'POINT')}"></td></tr>
+                            <tr class="table-primary"><td colspan="3" class="text-end fw-bold fs-5">Total General:</td><td class="text-end fw-bold fs-5" th:text="${currencySymbol} + ${#numbers.formatDecimal(sale.total, 1, 'COMMA', 2, 'POINT')}"></td></tr>
                             </tbody>
                         </table>
                     </div>

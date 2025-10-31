@@ -7,6 +7,24 @@ $(document).ready(function() {
     const clientDetailsModal = document.getElementById('clientDetailsModal') ? new bootstrap.Modal(document.getElementById('clientDetailsModal')) : null;
     const inventoryDetailsModal = document.getElementById('inventoryDetailsModal') ? new bootstrap.Modal(document.getElementById('inventoryDetailsModal')) : null;
     const employeeDetailsModal = document.getElementById('employeeDetailsModal') ? new bootstrap.Modal(document.getElementById('employeeDetailsModal')) : null;
+    const bodyCurrencySymbol = $('body').data('currency-symbol');
+
+    let currencySymbol = '$';
+
+    if (bodyCurrencySymbol) {
+        currencySymbol = bodyCurrencySymbol;
+    }
+
+    function formatCurrency(amount) {
+        if (amount === null || typeof amount === 'undefined') {
+            return currencySymbol + "0.00";
+        }
+        const formattedAmount = parseFloat(amount).toLocaleString('es-CO', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+        return currencySymbol + formattedAmount;
+    }
 
     $('body').on('click', '.btn-view', function() {
         const type = $(this).data('type');
@@ -67,8 +85,6 @@ $(document).ready(function() {
     function populateSaleModal(data) {
         if (!saleDetailsModal) return;
 
-        const formatCurrency = (num) => new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(num);
-
         $('#modalSaleId').text(data.idSale);
         $('#modalClientName').text(data.clientName);
         $('#modalEmployeeName').text(data.employeeName);
@@ -103,8 +119,6 @@ $(document).ready(function() {
     function populateArticleModal(data) {
         if (!articleDetailsModal) return;
 
-        const formatCurrency = (num) => new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(num);
-
         // Llenar los campos del modal de artículo
         $('#modalArticleId').text(data.idArticle);
         $('#modalArticleName').text(data.name);
@@ -123,8 +137,6 @@ $(document).ready(function() {
     // ===============================================================
     function populatePurchaseModal(data) {
         if (!purchaseDetailsModal) return;
-
-        const formatCurrency = (num) => new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(num);
 
         $('#modalPurchaseId').text(data.idPurchase);
         $('#modalPurchaseDate').text(data.date);

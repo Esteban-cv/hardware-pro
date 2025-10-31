@@ -47,6 +47,7 @@ public class SaleController {
         model.addAttribute("sales", sales);
         model.addAttribute("startDate", startDate);
         model.addAttribute("endDate", endDate);
+        model.addAttribute("currencySymbol", settingService.getSettingValue("CURRENCY_SYMBOL"));
         return "pages/sales/sale";
     }
 
@@ -125,6 +126,7 @@ public class SaleController {
         Hibernate.initialize(sale.getDetails());
         model.addAttribute("sale", sale);
         model.addAttribute("vatRate", settingService.getVatRate());
+        model.addAttribute("currencySymbol", settingService.getSettingValue("CURRENCY_SYMBOL"));
         return "pages/sales/edit-sale-form";
     }
 

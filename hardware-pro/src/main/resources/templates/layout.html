@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
 </head>
 
-<body th:data-success-message="${success}" th:data-error-message="${error}">
+<body th:data-success-message="${success}" th:data-error-message="${error}" th:data-currency-symbol="${globalCurrencySymbol}">
 <div id="app">
     <nav th:replace="~{fragments/sidebar :: sidebar}"></nav>
 
