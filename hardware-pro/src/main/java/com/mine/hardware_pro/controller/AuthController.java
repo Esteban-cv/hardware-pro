@@ -49,11 +49,6 @@ public class AuthController {
         return "auth/auth-login";
     }
 
-    @GetMapping("/dashboard")
-    public String showDashboard() {
-        return "pages/home";
-    }
-
     // Ruta para mostrar el formulario de registro
     @GetMapping("/register")
     public String showRegisterForm() {

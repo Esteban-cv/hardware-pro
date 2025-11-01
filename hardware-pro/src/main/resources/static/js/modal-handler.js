@@ -7,10 +7,10 @@ $(document).ready(function() {
     const clientDetailsModal = document.getElementById('clientDetailsModal') ? new bootstrap.Modal(document.getElementById('clientDetailsModal')) : null;
     const inventoryDetailsModal = document.getElementById('inventoryDetailsModal') ? new bootstrap.Modal(document.getElementById('inventoryDetailsModal')) : null;
     const employeeDetailsModal = document.getElementById('employeeDetailsModal') ? new bootstrap.Modal(document.getElementById('employeeDetailsModal')) : null;
-    const bodyCurrencySymbol = $('body').data('currency-symbol');
 
     let currencySymbol = '$';
 
+    const bodyCurrencySymbol = $('body').data('currency-symbol');
     if (bodyCurrencySymbol) {
         currencySymbol = bodyCurrencySymbol;
     }
